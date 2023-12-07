@@ -165,6 +165,44 @@ AS
 	RAISERROR ('You ARE NOT allowed to remove tables FROM this database.', 16, 1);
     -- Revert the statement that removes the TABLE
     ROLLBACK;
+
+------------------------ INTERESTING SECURITY TRIGGER
+go
+CREATE TRIGGER OrdersAudit
+ON Orders
+AFTER INSERT, update, delete
+AS
+	DECLARE @Insert BIT = 0;
+	DECLARE @Delete BIT = 0;
+	IF EXISTS (SELECT * FROM inserted) SET @Insert = 1;
+	IF EXISTS (SELECT * FROM deleted) SET @Delete = 1;
+	INSERT INTO TablesAudit (TableName, EventType, UserAccount, EventDate)
+	SELECT 'Orders' AS TableName
+	       ,CASE WHEN @Insert = 1 AND @Delete = 0 THEN 'INSERT'
+				 WHEN @Insert = 1 AND @Delete = 1 THEN 'UPDATE'
+				 WHEN @Insert = 0 AND @Delete = 1 THEN 'DELETE'
+				 END AS Event
+		   ,ORIGINAL_LOGIN() AS UserAccount
+		   ,GETDATE() AS EventDate;
+------------------------ ANOTHER FUNKY TRIGGER
+go
+CREATE TRIGGER ConfirmStock
+ON Orders
+INSTEAD OF INSERT
+AS
+	IF EXISTS (SELECT *
+			   FROM Products AS p
+			   INNER JOIN inserted AS i ON i.Product = p.Product
+			   WHERE p.Quantity < i.Quantity)
+	BEGIN
+		RAISERROR ('You cannot place orders when there is no stock for the order''s product.', 16, 1);
+	END
+	ELSE
+	BEGIN
+		INSERT INTO Orders (OrderID, Customer, Product, Price, Currency, Quantity, WithDiscount, Discount, OrderDate, TotalAmount, Dispatched)
+		SELECT OrderID, Customer, Product, Price, Currency, Quantity, WithDiscount, Discount, OrderDate, TotalAmount, Dispatched 
+		FROM inserted;
+	END;
 	
 -----------------------------------------------
 -- WHILE LOOPS

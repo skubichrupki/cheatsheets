@@ -31,3 +31,8 @@ git branch
 --------------------------------------
 git restore main.py | svn revert CHEATSHEET.sql
 git restore --staged main.env -> like unchecking the checkbox in desktop
+--------------------------------------
+---- delete commits
+--------------------------------------
+git reset ---soft HEAD~1
+git push origin +main --force
