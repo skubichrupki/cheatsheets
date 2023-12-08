@@ -1,0 +1,38 @@
+--------------------------------------
+---- update
+--------------------------------------
+git clone https://github.com/skubichrupki/SQL | svn checkout repository_URL [local_directory]
+cd SQL
+git fetch origin
+git pull origin | svn update
+--------------------------------------
+---- check
+--------------------------------------
+git status | svn status
+git diff CHEATSHEET.sql or git diff | svn diff CHEATSHEET.sql or svn diff
+git diff --cached -> staged but not commited
+q -> exit git diff
+--------------------------------------
+---- stage
+--------------------------------------
+git add . | svn add *
+git restore --staged CHEATSHEET.sql | svn revert CHEATSHEET.sql
+--------------------------------------
+---- commit
+--------------------------------------
+git commit -m "commit message" | svn commit -m "commit message"
+git push origin <main> svn update <directory>
+--------------------------------------
+---- branch
+--------------------------------------
+git branch
+--------------------------------------
+---- restoring
+--------------------------------------
+git restore main.py | svn revert CHEATSHEET.sql
+git restore --staged main.env -> like unchecking the checkbox in desktop
+--------------------------------------
+---- delete commits
+--------------------------------------
+git reset ---soft HEAD~1
+git push origin +main --force
