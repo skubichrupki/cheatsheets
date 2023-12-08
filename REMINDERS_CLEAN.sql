@@ -39,7 +39,7 @@ BEGIN
 	WHEN NOT MATCHED THEN
 		INSERT (
 			Main_ID, 
-			TypeShortDescription, My
+			TypeShortDescription,
 			Requestor_Name, 
 			Priority_Description, 
 			Status_Description, 
