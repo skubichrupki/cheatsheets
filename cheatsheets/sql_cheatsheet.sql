@@ -186,7 +186,7 @@ AS
 		   ,GETDATE() AS EventDate;
 ------------------------ ANOTHER FUNKY TRIGGER
 go
-CREATE TRIGGER ConfirmStock
+ALTER TRIGGER ConfirmStock
 ON Orders
 INSTEAD OF INSERT
 AS
@@ -203,7 +203,26 @@ AS
 		SELECT OrderID, Customer, Product, Price, Currency, Quantity, WithDiscount, Discount, OrderDate, TotalAmount, Dispatched 
 		FROM inserted;
 	END;
-	
+
+------------------------ DROPING TRIGGERS
+go
+DISABLE TRIGGER tr_updateMyAppTable -- on table lvl
+ON MyAppTable
+
+go
+ENABLE TRIGGER tr_updateMyAppTable -- on table lvl
+ON MyAppTable
+
+go
+DISABLE TRIGGER tr_showTableChanges
+ON DATABASE
+
+go
+DROP TRIGGER tr_updateMyAppTable -- on table lvl
+
+go
+DROP TRIGGER tr_showTableChanges
+ON ALL SERVER
 -----------------------------------------------
 -- WHILE LOOPS
 -----------------------------------------------
