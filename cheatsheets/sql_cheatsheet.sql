@@ -101,7 +101,7 @@ FROM MyApp_Table
 -- LOGON: LOGON
 -------- behaviours:
 -- AFTER,
-go
+GO
 CREATE TRIGGER TrackRetiredProducts
 ON products
 AFTER DELETE
@@ -111,29 +111,29 @@ AS
 	FROM deleted;
 
 -- instead of
-go
+GO
 CREATE TRIGGER MyApp_InsteadDelete
 ON MyApp_Main
 INSTEAD OF DELETE
 AS
 	PRINT('DELETE FROM MyApp_Main IS FORBIDDEN')
 
------------------------- send email ON fire 
-go
+------------------------ send email ON insert 
+GO
 CREATE TRIGGER Sales_AfterInfo
 ON Sales
 AFTER INSERT
 AS
 	INSERT INTO ProductsHistory
 	(Product, Price, Currency, FirstAdded)
-SELECT Product, Price, Currency, GETDATE()
-FROM inserted;
+	SELECT Product, Price, Currency, GETDATE()
+	FROM inserted;
 	EXEC sp_cleansing @Table = 'XD'
 	EXEC sp_generateSalesReport 
 	EXEC sp_sendNotification
 
 ------------------------ JOIN two tables during UPDATE
-go
+GO
 CREATE TRIGGER [XDXD]
 ON sales
 AFTER INSERT
@@ -146,7 +146,7 @@ AS
 	WHERE sal.amount IS NULL
 
 ------------------------ CREATE the TRIGGER to log TABLE info
-go
+GO
 CREATE TRIGGER TrackTableChanges
 ON DATABASE
 FOR CREATE_TABLE,
@@ -157,7 +157,7 @@ AS
     VALUES (EVENTDATA(), USER);
 
 ------------------------ ADD a TRIGGER to DISABLE the removal of tables
-go
+GO
 CREATE TRIGGER PreventTableDeletion
 ON DATABASE
 FOR DROP_TABLE
@@ -167,10 +167,10 @@ AS
     ROLLBACK;
 
 ------------------------ INTERESTING SECURITY TRIGGER
-go
+GO
 CREATE TRIGGER OrdersAudit
 ON Orders
-AFTER INSERT, update, delete
+AFTER INSERT, UPDATE, DELETE
 AS
 	DECLARE @Insert BIT = 0;
 	DECLARE @Delete BIT = 0;
@@ -181,11 +181,11 @@ AS
 	       ,CASE WHEN @Insert = 1 AND @Delete = 0 THEN 'INSERT'
 				 WHEN @Insert = 1 AND @Delete = 1 THEN 'UPDATE'
 				 WHEN @Insert = 0 AND @Delete = 1 THEN 'DELETE'
-				 END AS Event
+				 END AS EVENT
 		   ,ORIGINAL_LOGIN() AS UserAccount
 		   ,GETDATE() AS EventDate;
 ------------------------ ANOTHER FUNKY TRIGGER
-go
+GO
 ALTER TRIGGER ConfirmStock
 ON Orders
 INSTEAD OF INSERT
@@ -195,7 +195,7 @@ AS
 			   INNER JOIN inserted AS i ON i.Product = p.Product
 			   WHERE p.Quantity < i.Quantity)
 	BEGIN
-		RAISERROR ('You cannot place orders when there is no stock for the order''s product.', 16, 1);
+		RAISERROR ('You cannot place orders WHEN there IS no stock for the order''s product.', 16, 1);
 	END
 	ELSE
 	BEGIN
@@ -205,24 +205,28 @@ AS
 	END;
 
 ------------------------ DROPING TRIGGERS
-go
-DISABLE TRIGGER tr_updateMyAppTable -- on table lvl
+GO
+DISABLE TRIGGER tr_updateMyAppTable -- ON TABLE lvl
 ON MyAppTable
 
-go
-ENABLE TRIGGER tr_updateMyAppTable -- on table lvl
+GO
+ENABLE TRIGGER tr_updateMyAppTable -- ON TABLE lvl
 ON MyAppTable
 
-go
+GO
 DISABLE TRIGGER tr_showTableChanges
 ON DATABASE
 
-go
-DROP TRIGGER tr_updateMyAppTable -- on table lvl
+GO
+DROP TRIGGER tr_updateMyAppTable -- ON TABLE lvl
 
-go
+GO
 DROP TRIGGER tr_showTableChanges
 ON ALL SERVER
+
+------------------------ Check trigger executions log
+SELECT * FROM sys.dm_exec_trigger_stats
+
 -----------------------------------------------
 -- WHILE LOOPS
 -----------------------------------------------
@@ -246,13 +250,27 @@ FROM sys.server_triggers
 --- VIEW body of triggers
 SELECT OBJECT_DEFINITION (OBJECT_ID('MyApp_InsteadDelete'))
 
+-- get info about triggers on server
+SELECT *
+FROM sys.server_triggers
+
+SELECT *
+FROM sys.trigger_event_types
+
+-- ultimate trigger check
+select *
+from sys.triggers as t
+inner join sys.trigger_events as te on te.object_id = t.object_id
+left outer join sys.objects as o on o.object_id = t.parent_id
+
+
 -----------------------------------------------
 -- CASE
 -----------------------------------------------
 SELECT
 (CASE 
     WHEN x < 3 THEN result1
-    WHEN y like '%xd' THEN result2
+    WHEN y LIKE '%xd' THEN result2
     ELSE result3
 END) AS result_column
 
