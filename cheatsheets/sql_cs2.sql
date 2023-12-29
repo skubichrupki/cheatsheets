@@ -96,12 +96,23 @@ END
 -- INSTEAD OF
 GO
 CREATE TRIGGER tr_myTrigger
-ON table_name
-INSTEAD OF DELETE
+ON Orders
+INSTEAD OF INSERT
 AS
-BEGIN
-    PRINT('DELETE FROM table_name IS FORBIDDEN')
-END
+	IF EXISTS (SELECT *
+			   FROM Products AS p
+			   INNER JOIN inserted
+               ON inserted.Product = p.Product
+			   WHERE p.Quantity < inserted.Quantity)
+        BEGIN
+            PRINT('You cannot place orders WHEN there IS no product')
+        END
+	ELSE
+        BEGIN
+            INSERT INTO Orders (OrderID)
+            SELECT OrderID 
+            FROM inserted
+        END;
 
 -- ON DATABASE
 GO
@@ -139,24 +150,4 @@ SELECT table_ID
     WHEN @Insert = 0 AND @Delete = 1 THEN 'DELETE'
     WHEN @Insert = 1 AND @Delete = 1 THEN 'UPDATE'
 END AS EVENT
-
-GO
-CREATE TRIGGER tr_myTrigger
-ON Orders
-INSTEAD OF INSERT
-AS
-	IF EXISTS (SELECT *
-			   FROM Products AS p
-			   INNER JOIN inserted
-               ON inserted.Product = p.Product
-			   WHERE p.Quantity < inserted.Quantity)
-	BEGIN
-		PRINT('You cannot place orders WHEN there IS no product')
-	END
-	ELSE
-    BEGIN
-		INSERT INTO Orders (OrderID)
-		SELECT OrderID 
-		FROM inserted
-	END;
 
