@@ -2,6 +2,14 @@ USE db
 GO
 
 ----------------------------------------------
+-- SQL DATA TYPES
+
+int
+decimal, float,
+bit, money,
+date, datetime, datetime2
+
+----------------------------------------------
 -- CREATE TABLE
 
 CREATE TABLE table_name
@@ -74,8 +82,20 @@ SET @StartTime = CAST(ROW_INS_UTC_DATE AS DATETIME) + CAST(@ROW_INS_UTC_TIME AS 
 -- TABLE VARIABLE
 DECLARE @tmp_table_name TABLE (
 	table_ID INT,
-	description varchar(50)
+	description VARCHAR(50)
 )
+
+-----------------------------------------------
+-- PROCEDURES
+
+GO
+CREATE PROCEDURE usp_table_name_upd
+AS
+BEGIN
+    UPDATE table_name
+    SET complete_date = getdate()
+    WHERE status_id = 100
+END
 
 -----------------------------------------------
 -- TRIGGERS
@@ -125,7 +145,7 @@ AS
 	INSERT INTO TablesChangeLog (EventData, ChangedBy)
     VALUES (EVENTDATA(), USER);
 
------------------------- DROPING TRIGGERS
+-- DROPING/DISABLING TRIGGERS
 GO
 DISABLE TRIGGER tr_myTrigger
 ON table_name
@@ -150,4 +170,73 @@ SELECT table_ID
     WHEN @Insert = 0 AND @Delete = 1 THEN 'DELETE'
     WHEN @Insert = 1 AND @Delete = 1 THEN 'UPDATE'
 END AS EVENT
+
+IF EXISTS 
+    (SELECT * 
+    FROM Sales.EmpOrders 
+    WHERE empid =5)
+    BEGIN
+        PRINT 'Employee has associated orders';
+    END;
+ELSE
+    BEGIN
+        PRINT 'Employee doesnt have ANY associated orders';
+    END;
+
+-----------------------------------------------
+-- WHILE LOOPS
+
+DECLARE @i INT
+SET @i = 1
+WHILE @i <= 3
+BEGIN
+    INSERT INTO table_name (table_id, random_num, ins_datetime)
+    VALUES (@i, CAST(rand()*100 AS INT), getdate())
+    SET @i = @i + 1
+END
+
+-----------------------------------------------
+-- WINDOW FUNCTIONS
+
+SELECT
+ROW_NUMBER(),
+RANK(),
+DENSE_RANK(),
+LEAD(),
+LAG(),
+FIRST_VALUE(),
+LAST_VALUE(),
+-- TO DO
+NTILE(),
+PERCENT_RANK(),
+CUME_DIST()
+
+-----------------------------------------------
+-- CTE
+
+WITH cte AS (
+    SELECT num_ID
+    ,num
+    ,lag(num) OVER(ORDER BY ID) AS prev_num
+    ,lead(num) OVER(ORDER BY ID) AS next_num
+    FROM Logs
+)
+
+SELECT num AS three_in_row_num
+FROM cte
+WHERE num = prev_num
+AND num = next_num
+
+----------------------------------------------
+-- SQL SYSTEM FUNCTIONS
+
+SELECT
+CAST(GETDATE() AS nvarchar(50)) AS string_date
+,CAST('420,69' AS decimal(3,2)) AS string_to_decimal 
+,CONVERT(varchar(20), birthdate, 11)
+,CONVERT(decimal(3,2), '420.69') AS string_to_decimal -- only in sql server
+,GETDATE(), GETUTCDATE(), CURRENT_TIMESTAMP, SYSDATETIME(), SYSUTCDATETIME()
+,YEAR(), MONTH(), DAY() 
+,DATENAME(DAYOFYEAR, @Date), DATENAME(WEEKDAY, @Date), DATEPART(MONTH, @Date)
+,DATEADD(DAY, 14, @Date), DATEDIFF(HOUR, @ins_date, GETDATE())
 
