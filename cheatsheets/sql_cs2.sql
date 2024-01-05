@@ -231,12 +231,24 @@ AND num = next_num
 -- SQL SYSTEM FUNCTIONS
 
 SELECT
+--dates
 CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,CAST('420,69' AS decimal(3,2)) AS string_to_decimal 
 ,CONVERT(varchar(20), birthdate, 11)
 ,CONVERT(decimal(3,2), '420.69') AS string_to_decimal -- only in sql server
 ,GETDATE(), GETUTCDATE(), CURRENT_TIMESTAMP, SYSDATETIME(), SYSUTCDATETIME()
-,YEAR(), MONTH(), DAY() 
+,YEAR(@Date), MONTH(@Date), DAY(@Date) 
 ,DATENAME(DAYOFYEAR, @Date), DATENAME(WEEKDAY, @Date), DATEPART(MONTH, @Date)
 ,DATEADD(DAY, 14, @Date), DATEDIFF(HOUR, @ins_date, GETDATE())
+-- strings
+,LEN(@string), CHARINDEX('pizza', 'i like pizza and burgir', 5) -- third parameter is optional, use > 0 or = 0 (in where)
+,PATINDEX('%[xwq]%', last_name) -- can use wildcards % _ []
+,LOWER(), UPPER()
+,LEFT(@mystring, 3), RIGHT(@mystring, 3) -- first/last 3 characters
+,LTRIM(@string), RTRIM(@string), TRIM() -- trimming blanks
+,REPLACE('I like pizza', 'pizza', 'burgir') -- i like burgir
+,SUBSTRING('I like pizza', 7, 5) -- pizza (position, numer of letters)
+,CONCAT('string1', 'string2'), CONCAT_WS(' ', 'string1', 'string2') -- in ws you select a separator
+,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC)-- list of strings - useful with GROUP BY (year for example)
+,STRING_AGG(CONCAT(first_name, char(13))) -- carriage return
 
