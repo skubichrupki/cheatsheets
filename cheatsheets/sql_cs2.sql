@@ -59,7 +59,8 @@ SELECT
 	SUM(Amount),
 	MAX(Amount),
 	MIN(Amount),
-	AVG(Amount)
+	AVG(Amount),
+    AVG(DISTINCT Amount)
 
 -----------------------------------------------
 -- VARIABLES
@@ -202,14 +203,20 @@ SELECT
 ROW_NUMBER(),
 RANK(),
 DENSE_RANK(),
-LEAD(),
-LAG(),
-FIRST_VALUE(),
-LAST_VALUE(),
--- TO DO
+LEAD(), -- returns data from previous row in partition (PB-Opt OB-Mand)
+LAG(), -- returns data from next row in partition (PB-Opt OB-Mand)
+FIRST_VALUE(), -- returns first value in ORDERED set (PB-Opt OB-Mand) ROW/RANGE-Opt (like min)
+LAST_VALUE(), -- returns last value in ORDERED set (PB-Opt OB-Mand) ROW/RANGE-Opt (like max)
 NTILE(),
 PERCENT_RANK(),
-CUME_DIST()
+CUME_DIST(),
+-- OVER(PARTITION BY gender, ORDER BY gender RANGE BETWEEN start_boundary AND end_boundary)
+-- boundaries
+UNBOUNDED PRECEDING, -- first row in partition
+UNBOUNDED FOLLOWING, -- last row in partition
+'CURRENT' ROW, -- current row
+PRECEDING, -- previous row
+FOLLOWING -- next row
 
 -----------------------------------------------
 -- CTE
@@ -251,4 +258,17 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,CONCAT('string1', 'string2'), CONCAT_WS(' ', 'string1', 'string2') -- in ws you select a separator
 ,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC)-- list of strings - useful with GROUP BY (year for example)
 ,STRING_AGG(CONCAT(first_name, char(13))) -- carriage return
+-- mathematical
+,ABS(@amount) -- non negative value
+,SIGN(@amount) -- return -1,0,1 based if negative
+,CEILING(@amount) -- rounds to top
+,FLOOR(@amount) -- rounds to bottom
+,ROUND(@amount, 2) -- rounds to 2 decimals
+,POWER(@amount, 3) -- ^3
+,SQUARE(@amount) -- ^2
+,SQRT(@amount) -- ^(1/2)
+
+
+
+
 
