@@ -65,10 +65,10 @@ SELECT
 -----------------------------------------------
 -- VARIABLES
 
-DECLARE @StartTime AS TIME
+DECLARE @StartTime TIME
 SET @StartTime = '08:00'
 -- OR 
-DECLARE @StartTime AS TIME = '08:00'
+DECLARE @StartTime TIME = '08:00'
 
 -- SET AS SUBQUERY
 SET @StartTime = (
@@ -90,13 +90,22 @@ DECLARE @tmp_table_name TABLE (
 -- PROCEDURES
 
 GO
-CREATE PROCEDURE usp_table_name_upd
+CREATE PROCEDURE usp_table_name_upd (@var1 date, @var2 int)
 AS
 BEGIN
     UPDATE table_name
     SET complete_date = getdate()
-    WHERE status_id = 100
+    WHERE status_id = @var2 
+    AND begin_date = @var1 
 END
+
+-- EXECUTION (calling the procedure)
+EXEC usp_table_name_upd @var1='01.01.1999', @var2=69
+
+DECLARE @row_count int
+EXEC @result = usp_table_name_upd @var1='02.01.1999', @var2=420, @row_count_out = @row_count
+SELECT @result as 'result',
+@row_count as 'row_count' -- row_count_out needs to be declared in the procedure
 
 -----------------------------------------------
 -- TRIGGERS
@@ -267,6 +276,27 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,POWER(@amount, 3) -- ^3
 ,SQUARE(@amount) -- ^2
 ,SQRT(@amount) -- ^(1/2)
+
+----------------------------------------------
+-- USER DEFINED FUNCTIONS
+go
+CREATE OR ALTER FUNCTION myFunction()
+RETURNS int
+BEGIN
+
+    RETURN 0
+END
+
+go
+CREATE OR ALTER FUNCTION myTableFunction(@id int)
+RETURNS TABLE AS RETURN (
+    SELECT *
+    FROM table_name
+    WHERE id = @id
+)
+
+    
+
 
 
 
