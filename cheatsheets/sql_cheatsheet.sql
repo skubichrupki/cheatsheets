@@ -4,10 +4,10 @@ GO
 ----------------------------------------------
 -- SQL DATA TYPES
 
-int
-decimal, float,
-bit, money,
-date, datetime, datetime2
+INT
+DECIMAL, FLOAT,
+BIT, money,
+DATE, datetime, datetime2
 
 ----------------------------------------------
 -- CREATE TABLE
@@ -37,12 +37,18 @@ DROP COLUMN column_name;
 ----------------------------------------------
 -- INSERT DATA 
 
+-- NEW VALUES
 INSERT INTO table_name
 	(description, short_description)
 VALUES
 	('ASAP', 'ASAP'),
 	( 'Earliest Payment Run', 'EPR'),
 	( 'Specific Date', 'SD')
+
+-- VALUES FROM other TABLE
+INSERT INTO table_name
+SELECT * 
+FROM og_table_name
 
 ----------------------------------------------
 -- UPDATE DATA
@@ -90,7 +96,7 @@ DECLARE @tmp_table_name TABLE (
 -- PROCEDURES
 
 GO
-CREATE PROCEDURE usp_table_name_upd (@var1 date, @var2 int)
+CREATE PROCEDURE usp_table_name_upd (@var1 DATE, @var2 INT)
 AS
 BEGIN
     UPDATE table_name
@@ -102,10 +108,48 @@ END
 -- EXECUTION (calling the procedure)
 EXEC usp_table_name_upd @var1='01.01.1999', @var2=69
 
-DECLARE @row_count int
+DECLARE @row_count INT
 EXEC @result = usp_table_name_upd @var1='02.01.1999', @var2=420, @row_count_out = @row_count
-SELECT @result as 'result',
-@row_count as 'row_count' -- row_count_out needs to be declared in the procedure
+SELECT @result AS 'result',
+@row_count AS 'row_count' -- row_count_out needs to be declared IN the procedure
+
+-----------------------------------------------
+-- TRY / CATCH
+
+BEGIN TRY
+	INSERT INTO table_debug (test_flag, DATE)
+	VALUES (3, getdate())
+	SELECT 'test 1 - success' AS message
+	EXEC usp_mdmr_debug @test_id = 1, @test_description = 1
+END try
+BEGIN catch
+	SELECT 'test 1 - failed' AS message
+	EXEC usp_mdmr_debug @test_id = 1, @test_description = 0
+END CATCH
+
+GO
+CREATE PROCEDURE dbo.usp_table_name_upd @Error nvarchar(MAX) = NULL OUTPUT
+AS
+BEGIN
+    BEGIN TRY
+        DELETE FROM RideSummary
+        WHERE DATE = @DateParm
+    END TRY
+    BEGIN CATCH
+        SET @Error = 
+        'Error_Number: '+ CAST(ERROR_NUMBER() AS VARCHAR) 
+        + 'Error_Severity: '+ CAST(ERROR_SEVERITY() AS VARCHAR) 
+        + 'Error_State: ' + CAST(ERROR_STATE() AS VARCHAR) 
+        + 'Error_Message: ' + ERROR_MESSAGE() 
+        + 'Error_Line: ' + CAST(ERROR_LINE() AS VARCHAR)
+    END CATCH
+END
+
+-----------------------------------------------
+-- CONTRAINTS
+
+ALTER TABLE table_name
+ADD CONSTRAINT check_test_flag CHECK (test_flag IN (0,1))
 
 -----------------------------------------------
 -- TRIGGERS
@@ -129,6 +173,7 @@ CREATE TRIGGER tr_myTrigger
 ON Orders
 INSTEAD OF INSERT
 AS
+BEGIN
 	IF EXISTS (SELECT *
 			   FROM Products AS p
 			   INNER JOIN inserted
@@ -142,7 +187,8 @@ AS
             INSERT INTO Orders (OrderID)
             SELECT OrderID 
             FROM inserted
-        END;
+        END
+END
 
 -- ON DATABASE
 GO
@@ -212,20 +258,20 @@ SELECT
 ROW_NUMBER(),
 RANK(),
 DENSE_RANK(),
-LEAD(), -- returns data from previous row in partition (PB-Opt OB-Mand)
-LAG(), -- returns data from next row in partition (PB-Opt OB-Mand)
-FIRST_VALUE(), -- returns first value in ORDERED set (PB-Opt OB-Mand) ROW/RANGE-Opt (like min)
-LAST_VALUE(), -- returns last value in ORDERED set (PB-Opt OB-Mand) ROW/RANGE-Opt (like max)
+LEAD(), -- returns data FROM previous ROW IN PARTITION (PB-Opt OB-Mand)
+LAG(), -- returns data FROM NEXT ROW IN PARTITION (PB-Opt OB-Mand)
+FIRST_VALUE(), -- returns FIRST VALUE IN ORDERED SET (PB-Opt OB-Mand) ROW/RANGE-Opt (LIKE MIN)
+LAST_VALUE(), -- returns last VALUE IN ORDERED SET (PB-Opt OB-Mand) ROW/RANGE-Opt (LIKE MAX)
 NTILE(),
 PERCENT_RANK(),
 CUME_DIST(),
 -- OVER(PARTITION BY gender, ORDER BY gender RANGE BETWEEN start_boundary AND end_boundary)
 -- boundaries
-UNBOUNDED PRECEDING, -- first row in partition
-UNBOUNDED FOLLOWING, -- last row in partition
-'CURRENT' ROW, -- current row
-PRECEDING, -- previous row
-FOLLOWING -- next row
+UNBOUNDED PRECEDING, -- FIRST ROW IN PARTITION
+UNBOUNDED FOLLOWING, -- last ROW IN PARTITION
+'CURRENT' ROW, -- current ROW
+PRECEDING, -- previous ROW
+FOLLOWING -- NEXT ROW
 
 -----------------------------------------------
 -- CTE
@@ -249,28 +295,28 @@ AND num = next_num
 SELECT
 --dates
 CAST(GETDATE() AS nvarchar(50)) AS string_date
-,CAST('420,69' AS decimal(3,2)) AS string_to_decimal 
-,CONVERT(varchar(20), birthdate, 11)
-,CONVERT(decimal(3,2), '420.69') AS string_to_decimal -- only in sql server
+,CAST('420,69' AS DECIMAL(3,2)) AS string_to_decimal 
+,CONVERT(VARCHAR(20), birthdate, 11)
+,CONVERT(DECIMAL(3,2), '420.69') AS string_to_decimal -- only IN SQL server
 ,GETDATE(), GETUTCDATE(), CURRENT_TIMESTAMP, SYSDATETIME(), SYSUTCDATETIME()
 ,YEAR(@Date), MONTH(@Date), DAY(@Date) 
 ,DATENAME(DAYOFYEAR, @Date), DATENAME(WEEKDAY, @Date), DATEPART(MONTH, @Date)
 ,DATEADD(DAY, 14, @Date), DATEDIFF(HOUR, @ins_date, GETDATE())
 -- strings
-,LEN(@string), CHARINDEX('pizza', 'i like pizza and burgir', 5) -- third parameter is optional, use > 0 or = 0 (in where)
-,PATINDEX('%[xwq]%', last_name) -- can use wildcards % _ []
+,LEN(@string), CHARINDEX('pizza', 'i LIKE pizza AND burgir', 5) -- third parameter IS optional, USE > 0 OR = 0 (IN WHERE)
+,PATINDEX('%[xwq]%', last_name) -- can USE wildcards % _ []
 ,LOWER(), UPPER()
 ,LEFT(@mystring, 3), RIGHT(@mystring, 3) -- first/last 3 characters
 ,LTRIM(@string), RTRIM(@string), TRIM() -- trimming blanks
-,REPLACE('I like pizza', 'pizza', 'burgir') -- i like burgir
-,SUBSTRING('I like pizza', 7, 5) -- pizza (position, numer of letters)
-,CONCAT('string1', 'string2'), CONCAT_WS(' ', 'string1', 'string2') -- in ws you select a separator
-,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC)-- list of strings - useful with GROUP BY (year for example)
-,STRING_AGG(CONCAT(first_name, char(13))) -- carriage return
+,REPLACE('I LIKE pizza', 'pizza', 'burgir') -- i LIKE burgir
+,SUBSTRING('I LIKE pizza', 7, 5) -- pizza (position, numer of letters)
+,CONCAT('string1', 'string2'), CONCAT_WS(' ', 'string1', 'string2') -- IN ws you SELECT a separator
+,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC)-- list of strings - useful WITH GROUP BY (YEAR for example)
+,STRING_AGG(CONCAT(first_name, CHAR(13))) -- carriage RETURN
 -- mathematical
-,ABS(@amount) -- non negative value
-,SIGN(@amount) -- return -1,0,1 based if negative
-,CEILING(@amount) -- rounds to top
+,ABS(@amount) -- non negative VALUE
+,SIGN(@amount) -- RETURN -1,0,1 based IF negative
+,CEILING(@amount) -- rounds to TOP
 ,FLOOR(@amount) -- rounds to bottom
 ,ROUND(@amount, 2) -- rounds to 2 decimals
 ,POWER(@amount, 3) -- ^3
@@ -279,21 +325,33 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 
 ----------------------------------------------
 -- USER DEFINED FUNCTIONS
-go
+GO
 CREATE OR ALTER FUNCTION myFunction()
-RETURNS int
+RETURNS INT
 BEGIN
-
     RETURN 0
 END
 
-go
-CREATE OR ALTER FUNCTION myTableFunction(@id int)
+GO
+CREATE FUNCTION dbo.myFunction(@var1 INT)
+RETURNS INT
+AS
+BEGIN
+    RETURN (
+        SELECT @var1 * 42
+    ) 
+END 
+
+GO
+ALTER FUNCTION myTableFunction(@id INT)
 RETURNS TABLE AS RETURN (
     SELECT *
     FROM table_name
-    WHERE id = @id
+    WHERE ID = @id
 )
+
+
+
 
     
 
