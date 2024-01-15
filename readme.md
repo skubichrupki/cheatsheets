@@ -4,6 +4,8 @@ my SQL queries i found useful and would like to share
 **DEBUG.SQL** <br>
 Simple debugging procedure with three parameters showing what was tested, by who and when, typically used in the try...catch block
 
+<img src="./pdf/debug.png" width="700" style="border: 1px solid gray; padding: 3px;">
+
 **OPEN_REQUESTS_CLEAN.SQL** <br>
 Procedure to insert count of done requests by specialists after the shift
 
