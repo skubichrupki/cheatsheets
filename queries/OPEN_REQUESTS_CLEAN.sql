@@ -3,7 +3,6 @@ GO
 
 ------------------------------------------------------
 -- Table Schema 
-------------------------------------------------------
 CREATE TABLE MyApp_open_requests
 (
 	open_requests_ID INT PRIMARY KEY IDENTITY (1,1),
@@ -19,7 +18,6 @@ USE db_test
 GO
 ------------------------------------------------------
 -- PROCEDURE -> INSERT INTO MyApp_open_requests
-------------------------------------------------------
 -- Procedure to insert count of done requests by specialists after the shift
 -- Execute every day at 18:00 via job. Enters only people that have completed at least one requests that day
 CREATE PROCEDURE usp_MyApp_open_requests_upd
@@ -44,14 +42,13 @@ BEGIN
 	INNER JOIN db.dbo.Global_Person AS gp
 	ON gp.Person_ID = main.INSERTED_Person_ID
 	WHERE main.Main_ID IN (SELECT Main_ID
-							FROM db.dbo.MyApp_log
-							WHERE CAST([Log_UTCDate] AS DATE) = CAST(GETDATE() AS DATE)
-							AND Status_ID = 1000)
+				FROM db.dbo.MyApp_log
+				WHERE CAST([Log_UTCDate] AS DATE) = CAST(GETDATE() AS DATE)
+				AND Status_ID = 1000)
 END
 
 ------------------------------------------------------
 -- EXECUTION // CHECKS
-------------------------------------------------------
 EXEC usp_MyApp_open_requests_upd
 SELECT * FROM MyApp_open_requests
 TRUNCATE TABLE MyApp_open_requests
