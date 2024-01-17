@@ -10,17 +10,17 @@ AS
 BEGIN
 	-- CTE -- CHECK requestor AND ticket
 	WITH CTE AS (SELECT DISTINCT Main_ID
-				,TypeShortDescription
-				,Requestor_Name
-				,Priority_Description
-				,Status_Description
-				,Requestor_ID
-				,CONVERT(VARCHAR, Log_UTCDate, 106) as Log_UTCDate
-				,Creation_Date
-				,COUNT(Requestor_ID) OVER(PARTITION BY Requestor_ID) AS ID_count
-				FROM [db].[dbo].[MyApp_View_Main]
-				WHERE Status_ID <= 3
-				AND datediff(DAY,[Log_UTCDate], GETDATE()) > 7)
+			,TypeShortDescription
+			,Requestor_Name
+			,Priority_Description
+			,Status_Description
+			,Requestor_ID
+			,CONVERT(VARCHAR, Log_UTCDate, 106) as Log_UTCDate
+			,Creation_Date
+			,COUNT(Requestor_ID) OVER(PARTITION BY Requestor_ID) AS ID_count
+			FROM [db].[dbo].[MyApp_View_Main]
+			WHERE Status_ID <= 3
+			AND datediff(DAY,[Log_UTCDate], GETDATE()) > 7)
 
 	-- MERGE: UPDATE OR INSERT data
 	-- CONDITION: if Main_ID/person combination in source == in target, ReminderCount adds 1, otherwise set to 1
@@ -92,8 +92,8 @@ BEGIN
 	BEGIN
 		DELETE FROM MyApp_Reminder
 		WHERE Main_ID IN (SELECT Main_ID
-							FROM inserted
-							WHERE Status_ID NOT IN (1,2,3))
+				  FROM inserted
+				  WHERE Status_ID NOT IN (1,2,3))
 	END
 END
 

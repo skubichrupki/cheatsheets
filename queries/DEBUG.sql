@@ -17,7 +17,7 @@ GO
 CREATE PROCEDURE usp_table_Debug @test_ID INT, @test_flag INT, @test_description VARCHAR(50)
 AS 
 BEGIN
-	INSERT INTO tda_test.dbo.table_debug (
+	INSERT INTO db_test.dbo.table_debug (
 		test_ID, 
 		test_flag,
 		test_description,
@@ -41,10 +41,12 @@ GO
 BEGIN TRY
 	INSERT INTO table_Debug (test_flag, DATE)
 	VALUES (3, getdate())
+	-- show result in tmp table and exec the proc
 	SELECT 'test 1 - success' AS message
 	EXEC usp_table_debug @test_id = 1, @test_flag = 1, @test_description = 'insert test'
 END TRY
 BEGIN CATCH
+	-- show result in tmp table and exec the proc
 	SELECT 'test 1 - failed' AS message
 	EXEC usp_table_debug @test_id = 1, @test_flag = 0, @test_description = 'insert test'
 END CATCH
