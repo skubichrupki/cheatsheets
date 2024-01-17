@@ -128,7 +128,7 @@ BEGIN catch
 END CATCH
 
 GO
-CREATE PROCEDURE dbo.usp_table_name_upd @Error nvarchar(MAX) = NULL OUTPUT
+CREATE PROCEDURE dbo.usp_table_name_upd
 AS
 BEGIN
     BEGIN TRY
@@ -136,12 +136,12 @@ BEGIN
         WHERE DATE = @DateParm
     END TRY
     BEGIN CATCH
-        SET @Error = 
-        'Error_Number: '+ CAST(ERROR_NUMBER() AS VARCHAR) 
-        + 'Error_Severity: '+ CAST(ERROR_SEVERITY() AS VARCHAR) 
-        + 'Error_State: ' + CAST(ERROR_STATE() AS VARCHAR) 
-        + 'Error_Message: ' + ERROR_MESSAGE() 
-        + 'Error_Line: ' + CAST(ERROR_LINE() AS VARCHAR)
+        SELECT
+        CAST(ERROR_NUMBER() AS VARCHAR), 
+        CAST(ERROR_SEVERITY() AS VARCHAR), 
+        CAST(ERROR_STATE() AS VARCHAR),
+        ERROR_MESSAGE(), 
+        CAST(ERROR_LINE() AS VARCHAR)
     END CATCH
 END
 
@@ -150,6 +150,18 @@ END
 
 ALTER TABLE table_name
 ADD CONSTRAINT check_test_flag CHECK (test_flag IN (0,1))
+
+-----------------------------------------------
+-- ERRORS
+-- levels: 0-10: info, 11-16: constraint violations etc, 17-24: software, fatal errors
+-- 11-19 are catchable, >= 20 cant be catched
+SELECT
+ERROR_NUMBER(),
+ERROR_SEVERITY(),
+ERROR_STATE(),
+ERROR_LINE(),
+ERROR_MESSAGE(),
+ERROR_PROCEDURE()
 
 -----------------------------------------------
 -- TRIGGERS
