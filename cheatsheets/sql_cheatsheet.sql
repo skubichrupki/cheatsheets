@@ -138,13 +138,13 @@ BEGIN TRY
 	INSERT INTO table_debug (test_flag, DATE)
 	VALUES (3, getdate())
 	SELECT 'test 1 - success' AS message
-	EXEC usp_mdmr_debug @test_id = 1, @test_description = 1
+	EXEC usp_table_debug @test_id = 1, @test_description = 1
 END try
 BEGIN catch
 	SELECT 'test 1 - failed' AS message
-	EXEC usp_mdmr_debug @test_id = 1, @test_description = 0
+	EXEC usp_table_debug @test_id = 1, @test_description = 0
 END CATCH
-
+--
 GO
 CREATE PROCEDURE dbo.usp_table_name_upd
 AS
@@ -262,7 +262,7 @@ SELECT table_ID
     WHEN @Insert = 0 AND @Delete = 1 THEN 'DELETE'
     WHEN @Insert = 1 AND @Delete = 1 THEN 'UPDATE'
 END AS EVENT
-
+--
 IF EXISTS 
     (SELECT * 
     FROM Sales.EmpOrders 
@@ -369,7 +369,7 @@ RETURNS INT
 BEGIN
     RETURN 0
 END
-
+--
 GO
 CREATE FUNCTION dbo.myFunction(@var1 INT)
 RETURNS INT
@@ -379,7 +379,7 @@ BEGIN
         SELECT @var1 * 42
     ) 
 END 
-
+--
 GO
 ALTER FUNCTION myTableFunction(@id INT)
 RETURNS TABLE AS RETURN (
@@ -401,6 +401,18 @@ CREATE VIEW high_scores AS
 SELECT * FROM REVIEWS
 WHERE score > 9;
 
+GO
+DROP VIEW table_v_main
+
+----------------------------------------------
+-- ACCESS / PERMISSIONS
+
+GO
+GRANT SELECT, UPDATE ON table_v_main TO PUBLIC;
+REVOKE INSERT ON table_v_main FROM reporting_user;
+
+-- privileges
+-- SELECT, INSERT, UPDATE, DELETE, REFERENCES, ALTER, ALL
 
 
     
