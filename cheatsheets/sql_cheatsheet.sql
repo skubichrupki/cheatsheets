@@ -342,6 +342,7 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,DATENAME(WEEKDAY, @Date), DATENAME(MONTH, @Date) -- only these 2 return real string
 ,DATEADD(DAY, 14, @Date)
 ,DATEDIFF(HOUR, @ins_date, GETDATE())
+,FORMAT(@Date, d, 'de-DE')
 
 -- strings
 ,LEN(@string)
