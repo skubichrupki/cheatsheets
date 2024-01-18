@@ -16,7 +16,7 @@ CREATE TABLE table_name
 (
 	-- DEFINE columns
 	table_ID INT PRIMARY KEY IDENTITY (1,1),
-	description VARCHAR(50)
+	description VARCHAR(50) NOT NULL DEFAULT('empty')
 )
 
 -- CREATE TABLE FROM EXISTING TABLE
@@ -56,6 +56,24 @@ FROM og_table_name
 UPDATE table_name
 SET column_1 = 1
 WHERE column_2 < 18
+
+----------------------------------------------
+-- JOINS
+
+----------------------------------------------
+-- UNIONS
+
+SELECT query2
+FROM query2
+
+UNION
+SELECT query2
+FROM query2
+
+EXCEPT
+SELECT query3
+FROM query3
+-- UNION ALL, INTERSECT, EXCEPT
 
 -----------------------------------------------
 -- AGGREGATE FUNCTIONS
@@ -152,6 +170,12 @@ ALTER TABLE table_name
 ADD CONSTRAINT check_test_flag CHECK (test_flag IN (0,1))
 
 -----------------------------------------------
+-- FOREIGN KEYS
+
+ALTER TABLE table_name 
+ADD CONSTRAINT main_person FOREIGN KEY (person_id) REFERENCES table_person (person_ID);
+
+-----------------------------------------------
 -- ERRORS
 -- levels: 0-10: info, 11-16: constraint violations etc, 17-24: software, fatal errors
 -- 11-19 are catchable, >= 20 cant be catched
@@ -166,7 +190,7 @@ ERROR_PROCEDURE()
 -----------------------------------------------
 -- TRIGGERS
 
--- AFTER
+-- after
 GO
 CREATE TRIGGER tr_myTrigger
 ON table_name
@@ -179,7 +203,7 @@ BEGIN
     EXEC usp_send_email
 END
 
--- INSTEAD OF
+-- instead of
 GO
 CREATE TRIGGER tr_myTrigger
 ON Orders
@@ -202,7 +226,7 @@ BEGIN
         END
 END
 
--- ON DATABASE
+-- on database
 GO
 CREATE TRIGGER TrackTableChanges
 ON DATABASE
@@ -213,7 +237,7 @@ AS
 	INSERT INTO TablesChangeLog (EventData, ChangedBy)
     VALUES (EVENTDATA(), USER);
 
--- DROPING/DISABLING TRIGGERS
+-- droping/disabling database
 GO
 DISABLE TRIGGER tr_myTrigger
 ON table_name
@@ -281,7 +305,7 @@ CUME_DIST(),
 -- boundaries
 UNBOUNDED PRECEDING, -- FIRST ROW IN PARTITION
 UNBOUNDED FOLLOWING, -- last ROW IN PARTITION
-CURRENT ROW, -- current ROW
+-- CURRENT ROW, -- current ROW
 PRECEDING, -- previous ROW
 FOLLOWING -- NEXT ROW
 
@@ -334,9 +358,11 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,POWER(@amount, 3) -- ^3
 ,SQUARE(@amount) -- ^2
 ,SQRT(@amount) -- ^(1/2)
+,RAND() -- random from 0-1, can also be used in order by to return random rows
 
 ----------------------------------------------
 -- USER DEFINED FUNCTIONS
+
 GO
 CREATE OR ALTER FUNCTION myFunction()
 RETURNS INT
@@ -362,6 +388,18 @@ RETURNS TABLE AS RETURN (
     WHERE ID = @id
 )
 
+----------------------------------------------
+-- VIEWS
+
+-- see all views
+GO
+SELECT * 
+FROM information_schema.views
+
+GO
+CREATE VIEW high_scores AS
+SELECT * FROM REVIEWS
+WHERE score > 9;
 
 
 
