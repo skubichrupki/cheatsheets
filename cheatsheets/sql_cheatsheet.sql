@@ -334,21 +334,29 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,CAST('420,69' AS DECIMAL(3,2)) AS string_to_decimal 
 ,CONVERT(VARCHAR(20), birthdate, 11)
 ,CONVERT(DECIMAL(3,2), '420.69') AS string_to_decimal -- only IN SQL server
-,GETDATE(), GETUTCDATE(), CURRENT_TIMESTAMP, SYSDATETIME(), SYSUTCDATETIME()
+,GETDATE()
+,GETUTCDATE(), CURRENT_TIMESTAMP
+,SYSDATETIME(), SYSUTCDATETIME()
 ,YEAR(@Date), MONTH(@Date), DAY(@Date) 
-,DATENAME(DAYOFYEAR, @Date), DATENAME(WEEKDAY, @Date), DATEPART(MONTH, @Date)
-,DATEADD(DAY, 14, @Date), DATEDIFF(HOUR, @ins_date, GETDATE())
+,DATEPART(YEAR, @Date) ,DATEPART(DAYOFYEAR, @Date)
+,DATENAME(WEEKDAY, @Date), DATENAME(MONTH, @Date) -- only these 2 return real string
+,DATEADD(DAY, 14, @Date)
+,DATEDIFF(HOUR, @ins_date, GETDATE())
+
 -- strings
-,LEN(@string), CHARINDEX('pizza', 'i LIKE pizza AND burgir', 5) -- third parameter IS optional, USE > 0 OR = 0 (IN WHERE)
+,LEN(@string)
+,CHARINDEX('pizza', 'i LIKE pizza AND burgir', 5) -- third parameter IS optional, USE > 0 OR = 0 (IN WHERE)
 ,PATINDEX('%[xwq]%', last_name) -- can USE wildcards % _ []
 ,LOWER(), UPPER()
-,LEFT(@mystring, 3), RIGHT(@mystring, 3) -- first/last 3 characters
+,LEFT(@mystring, 3)
+,RIGHT(@mystring, 3) -- first/last 3 characters
 ,LTRIM(@string), RTRIM(@string), TRIM() -- trimming blanks
 ,REPLACE('I LIKE pizza', 'pizza', 'burgir') -- i LIKE burgir
 ,SUBSTRING('I LIKE pizza', 7, 5) -- pizza (position, numer of letters)
 ,CONCAT('string1', 'string2'), CONCAT_WS(' ', 'string1', 'string2') -- IN ws you SELECT a separator
 ,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC)-- list of strings - useful WITH GROUP BY (YEAR for example)
 ,STRING_AGG(CONCAT(first_name, CHAR(13))) -- carriage RETURN
+
 -- mathematical
 ,ABS(@amount) -- non negative VALUE
 ,SIGN(@amount) -- RETURN -1,0,1 based IF negative
