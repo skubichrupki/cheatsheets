@@ -370,6 +370,12 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,SQRT(@amount) -- ^(1/2)
 ,RAND() -- random from 0-1, can also be used in order by to return random rows
 
+- apply
+FROM table_name
+CROSS APPLY (
+	SELECT my_date = DATEADD(DAY, 7, GETDATE())
+) as my_date_applied
+
 ----------------------------------------------
 -- USER DEFINED FUNCTIONS
 
