@@ -342,7 +342,8 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,DATENAME(WEEKDAY, @Date), DATENAME(MONTH, @Date) -- only these 2 return real string
 ,DATEADD(DAY, 14, @Date)
 ,DATEDIFF(HOUR, @ins_date, GETDATE())
-,FORMAT(@Date, d, 'de-DE')
+,FORMAT(@Date, 'd', 'pl-PL'), FORMAT(@Date, 'dd-MM-YYYY')
+,FORMAT(CAST('2018-01-01 14:00' AS datetime2), N'HH:mm') -- 14:00
 
 -- strings
 ,LEN(@string)
