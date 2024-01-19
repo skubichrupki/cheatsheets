@@ -7,3 +7,7 @@ Packages are like workspaces for flows in Alteryx
 Miscellaneous folder -> other things not related to the flow 
 <br>
 Connection Managers -> manage the sources of you connections
+<br>
+**control flow**
+tools:
+- data flow task -> move data from one source to another
