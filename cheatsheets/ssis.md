@@ -11,3 +11,11 @@ Connection Managers -> manage the sources of you connections
 **control flow**
 tools:
 - data flow task -> move data from one source to another
+
+<br>
+Basic transformations:
+- Derived Column
+- Data Conversion
+- Copy Column
+- Character Map
+- Sort
