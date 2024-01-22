@@ -35,3 +35,6 @@ Basic transformations:
 
 **Character Map**
 - functions regarding the value like UPPER()
+
+**Sort**
+- like order by
