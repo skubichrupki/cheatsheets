@@ -23,3 +23,9 @@ Basic transformations:
 
 **Data Conversion**
 - varchar(String DT_STR), nvarchar(Unicode String DT_WSTR)
+
+**Execute SQL task
+- custom query in control flow
+
+**Derived Column**
+- use functions to alternate, create columns on existing columns
