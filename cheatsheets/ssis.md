@@ -38,3 +38,6 @@ Basic transformations:
 
 **Sort**
 - like order by
+
+**Multicast**
+- multiple sources or destinations
