@@ -14,6 +14,7 @@ tools:
 
 <br>
 Basic transformations:
+
 - Derived Column
 - Data Conversion
 - Copy Column
@@ -21,4 +22,4 @@ Basic transformations:
 - Sort
 
 **Data Conversion**
-- varchar(String DT_STR), nvarchar(String DT_WSTR) -> unicode
+- varchar(String DT_STR), nvarchar(Unicode String DT_WSTR)
