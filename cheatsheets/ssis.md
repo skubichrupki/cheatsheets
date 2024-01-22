@@ -32,3 +32,6 @@ Basic transformations:
 
 **Derived Column**
 - use functions to alternate, create columns on existing columns
+
+**Character Map**
+- functions regarding the value like UPPER()
