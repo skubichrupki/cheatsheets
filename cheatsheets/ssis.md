@@ -24,7 +24,10 @@ Basic transformations:
 **Data Conversion**
 - varchar(String DT_STR), nvarchar(Unicode String DT_WSTR)
 
-**Execute SQL task
+**Data Viewer**
+- debugging, shows data at certain step
+
+**Execute SQL task**
 - custom query in control flow
 
 **Derived Column**
