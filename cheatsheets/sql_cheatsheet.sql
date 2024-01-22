@@ -334,6 +334,7 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,CAST('420,69' AS DECIMAL(3,2)) AS string_to_decimal 
 ,CONVERT(VARCHAR(20), birthdate, 11)
 ,CONVERT(DECIMAL(3,2), '420.69') AS string_to_decimal -- only IN SQL server
+,PARSE(birthdate AS date USING de-de)
 ,GETDATE()
 ,GETUTCDATE(), CURRENT_TIMESTAMP
 ,SYSDATETIME(), SYSUTCDATETIME()
