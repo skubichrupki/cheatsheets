@@ -19,3 +19,6 @@ Basic transformations:
 - Copy Column
 - Character Map
 - Sort
+
+**Data Conversion**
+- varchar(String DT_STR), nvarchar(String DT_WSTR) -> unicode
