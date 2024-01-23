@@ -177,8 +177,8 @@ ADD CONSTRAINT main_person FOREIGN KEY (person_id) REFERENCES table_person (pers
 
 -----------------------------------------------
 -- ERRORS
--- levels: 0-10: info, 11-16: constraint violations etc, 17-24: software, fatal errors
--- 11-19 are catchable, >= 20 cant be catched
+-- levels: 0-10: info, 11-16: CONSTRAINT violations etc, 17-24: software, fatal errors
+-- 11-19 ARE catchable, >= 20 cant be catched
 SELECT
 ERROR_NUMBER(),
 ERROR_SEVERITY(),
@@ -226,7 +226,7 @@ BEGIN
         END
 END
 
--- on database
+-- ON DATABASE
 GO
 CREATE TRIGGER TrackTableChanges
 ON DATABASE
@@ -237,7 +237,7 @@ AS
 	INSERT INTO TablesChangeLog (EventData, ChangedBy)
     VALUES (EVENTDATA(), USER);
 
--- droping/disabling database
+-- droping/disabling DATABASE
 GO
 DISABLE TRIGGER tr_myTrigger
 ON table_name
@@ -334,13 +334,13 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,CAST('420,69' AS DECIMAL(3,2)) AS string_to_decimal 
 ,CONVERT(VARCHAR(20), birthdate, 11)
 ,CONVERT(DECIMAL(3,2), '420.69') AS string_to_decimal -- only IN SQL server
-,PARSE(birthdate AS date USING de-de)
+,PARSE(birthdate AS DATE USING de-de)
 ,GETDATE()
 ,GETUTCDATE(), CURRENT_TIMESTAMP
 ,SYSDATETIME(), SYSUTCDATETIME()
 ,YEAR(@Date), MONTH(@Date), DAY(@Date) 
 ,DATEPART(YEAR, @Date) ,DATEPART(DAYOFYEAR, @Date)
-,DATENAME(WEEKDAY, @Date), DATENAME(MONTH, @Date) -- only these 2 return real string
+,DATENAME(WEEKDAY, @Date), DATENAME(MONTH, @Date) -- only these 2 RETURN real string
 ,DATEADD(DAY, 14, @Date)
 ,DATEDIFF(HOUR, @ins_date, GETDATE())
 ,FORMAT(@Date, 'd', 'pl-PL'), FORMAT(@Date, 'dd-MM-YYYY'), FORMAT(123456, '###-###')
@@ -369,13 +369,13 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,POWER(@amount, 3) -- ^3
 ,SQUARE(@amount) -- ^2
 ,SQRT(@amount) -- ^(1/2)
-,RAND() -- random from 0-1, can also be used in order by to return random rows
+,RAND() -- random FROM 0-1, can also be used IN ORDER BY to RETURN random ROWS
 
 - apply
 FROM table_name
 CROSS APPLY (
 	SELECT my_date = DATEADD(DAY, 7, GETDATE())
-) as my_date_applied
+) AS my_date_applied
 
 ----------------------------------------------
 -- USER DEFINED FUNCTIONS
@@ -431,6 +431,14 @@ REVOKE INSERT ON table_v_main FROM reporting_user;
 -- privileges
 -- SELECT, INSERT, UPDATE, DELETE, REFERENCES, ALTER, ALL
 
+
+----------------------------------------------
+-- TRANSACTIONS
+BEGIN TRANSACTION my_tran
+    DELETE FROM [AdventureWorks2022].[Sales].[Customer]
+    WHERE CustomerID = 4
+
+ROLLBACK TRANSACTION my_tran
 
     
 
