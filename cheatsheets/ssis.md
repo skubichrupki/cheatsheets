@@ -1,6 +1,6 @@
 Hierarchy:
-Solution -> Projects -> Packages<br>
-![Alt text](image.png)
+Solution -> Projects -> Packages
+
 <br>
 Packages are like workspaces for flows in Alteryx
 .dts -> data transformation services file
