@@ -421,10 +421,42 @@ WHERE score > 9;
 GO
 DROP VIEW table_v_main
 
+--
+--CREATE MATERIALIZED VIEW low_scores AS 
+SELECT * FROM low_score
+GROUP BY score
+
+--REFRESH MATERIALIZED VIEW low_scores
+
 ----------------------------------------------
 -- ACCESS / PERMISSIONS
 
+-- LOGINS / USERS
+
+-- create login
 GO
+CREATE LOGIN reporting_user
+WITH PASSWORD = 'myPswrd'
+-- alter role marta with password 's3cur3p@ssw0rd'; (postgre)
+
+-- create user for the login created above
+GO
+CREATE USER reporting_user FOR LOGIN reporting_user
+
+-- ROLES
+CREATE ROLE data_analyst
+GRANT UPDATE ON sales TO data_analyst
+
+GRANT data_analyst TO reporting_user
+REVOKE data_analyst FROM reporting_user
+DROP ROLE data_analyst
+-- create role admin with createdb createrole; (postgre)
+-- WITH PASSWORD 'analyst' VALID UNTIL '2024-02-12' 
+
+-- GRANT/REVOKE x ON y TO/FROM z
+
+GO
+-- give / removeaccess
 GRANT SELECT, UPDATE ON table_v_main TO PUBLIC;
 REVOKE INSERT ON table_v_main FROM reporting_user;
 
@@ -434,11 +466,26 @@ REVOKE INSERT ON table_v_main FROM reporting_user;
 
 ----------------------------------------------
 -- TRANSACTIONS
+
 BEGIN TRANSACTION my_tran
     DELETE FROM [AdventureWorks2022].[Sales].[Customer]
     WHERE CustomerID = 4
 
 ROLLBACK TRANSACTION my_tran
+
+----------------------------------------------
+-- INDEXES
+
+GO
+CREATE VIEW sales_by_region WITH SCHEMABINDING
+AS
+SELECT region, SUM(sales_amount) AS sales_amount_sum
+FROM sales_table
+GROUP BY region
+
+GO
+CREATE UNIQUE CLUSTERED INDEX IX_sales_by_region
+ON sales_by_region (region)
 
     
 
