@@ -472,6 +472,7 @@ BEGIN TRANSACTION my_tran
     WHERE CustomerID = 4
 
 ROLLBACK TRANSACTION my_tran
+COMMIT TRANSACTION my_tran
 
 ----------------------------------------------
 -- INDEXES
@@ -486,6 +487,30 @@ GROUP BY region
 GO
 CREATE UNIQUE CLUSTERED INDEX IX_sales_by_region
 ON sales_by_region (region)
+
+----------------------------------------------
+-- PARTITIONING (postgre)
+
+-- vertical
+
+CREATE TABLE table_name (
+	table_ID INT PRIMARY KEY IDENTITY (1,1),
+	ins_date DATE NOT NULL
+)
+/*
+PARTITION BY RANGE (ins_date)
+CREATE TABLE table_name_2018 
+PARTITION OF table_name (
+    FOR VALUES FROM ('01-01-2018') TO ('31-12-2018')
+)
+CREATE TABLE table_name_2019 
+PARTITION OF table_name (
+    FOR VALUES IN ('2019');
+)
+CREATE INDEX ON table_name ('ins_date')
+*/
+
+
 
     
 
