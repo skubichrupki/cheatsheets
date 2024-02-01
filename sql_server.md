@@ -176,7 +176,8 @@ GO
     ADD CONSTRAINT main_person FOREIGN KEY (person_id) REFERENCES table_person (person_ID);
 
 -----------------------------------------------
-    -- ERRORS
+### ERRORS
+    
     -- levels: 0-10: info, 11-16: CONSTRAINT violations etc, 17-24: software, fatal errors
     -- 11-19 ARE catchable, >= 20 cant be catched
     SELECT
@@ -190,7 +191,8 @@ GO
 -----------------------------------------------
 ### TRIGGERS
 
-    -- after
+**after**
+
     GO
     CREATE TRIGGER tr_myTrigger
     ON table_name
@@ -203,7 +205,8 @@ GO
         EXEC usp_send_email
     END
 
-    -- instead of
+**instead of** 
+
     GO
     CREATE TRIGGER tr_myTrigger
     ON Orders
@@ -226,7 +229,7 @@ GO
             END
     END
 
-    -- ON DATABASE
+**on database**
     GO
     CREATE TRIGGER TrackTableChanges
     ON DATABASE
@@ -424,7 +427,33 @@ GO
 ----------------------------------------------
 ### ACCESS / PERMISSIONS
 
+**Logins Users** 
+
+    --CREATE login 
+
     GO
+    CREATE LOGIN reporting_user
+    WITH PASSWORD = 'myPswrd'
+    -- ALTER role marta WITH password 's3cur3p@ssw0rd'; (postgre)
+
+    -- CREATE user for the login created above
+    GO
+    CREATE USER reporting_user FOR LOGIN reporting_user
+
+    -- ROLES
+    CREATE ROLE data_analyst
+    GRANT UPDATE ON sales TO data_analyst
+
+    GRANT data_analyst TO reporting_user
+    REVOKE data_analyst FROM reporting_user
+    DROP ROLE data_analyst
+    -- CREATE role admin WITH createdb createrole; (postgre)
+    -- WITH PASSWORD 'analyst' VALID UNTIL '2024-02-12' 
+
+    -- GRANT/REVOKE x ON y TO/FROM z
+
+    GO
+    -- give / removeaccess
     GRANT SELECT, UPDATE ON table_v_main TO PUBLIC;
     REVOKE INSERT ON table_v_main FROM reporting_user;
 
@@ -440,7 +469,56 @@ GO
         WHERE CustomerID = 4
 
     ROLLBACK TRANSACTION my_tran
-    COMMIT
+    COMMIT TRANSACTION my_tran
+
+----------------------------------------------
+### INDEXES
+
+GO
+CREATE VIEW sales_by_region WITH SCHEMABINDING
+AS
+SELECT region, SUM(sales_amount) AS sales_amount_sum
+FROM sales_table
+GROUP BY region
+
+GO
+CREATE UNIQUE CLUSTERED INDEX IX_sales_by_region
+ON sales_by_region (region)
+
+----------------------------------------------
+## PARTITIONING (postgre)
+
+-- vertical
+
+CREATE TABLE table_name (
+	table_ID INT PRIMARY KEY IDENTITY (1,1),
+	ins_date DATE NOT NULL
+)
+/*
+PARTITION BY RANGE (ins_date)
+CREATE TABLE table_name_2018 
+PARTITION OF table_name (
+    FOR VALUES FROM ('01-01-2018') TO ('31-12-2018')
+)
+CREATE TABLE table_name_2019 
+PARTITION OF table_name (
+    FOR VALUES IN ('2019');
+)
+CREATE INDEX ON table_name ('ins_date')
+*/
+
+----------------------------------------------
+## MERGE
+
+MERGE db_test.dbo.TableName AS TARGET
+USING db_test.dbo.TableName_tmp AS source
+ON target.Code_ID = source.Code_ID
+WHEN MATCHED THEN
+	UPDATE
+	SET target.Description = source.Description
+WHEN NOT MATCHED THEN
+	INSERT (Code_ID, Description)
+	VALUES (source.Code_ID, source.Description);
 
         
 

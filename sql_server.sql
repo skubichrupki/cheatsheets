@@ -433,13 +433,13 @@ GROUP BY score
 
 -- LOGINS / USERS
 
--- create login
+-- CREATE login
 GO
 CREATE LOGIN reporting_user
 WITH PASSWORD = 'myPswrd'
--- alter role marta with password 's3cur3p@ssw0rd'; (postgre)
+-- ALTER role marta WITH password 's3cur3p@ssw0rd'; (postgre)
 
--- create user for the login created above
+-- CREATE user for the login created above
 GO
 CREATE USER reporting_user FOR LOGIN reporting_user
 
@@ -450,7 +450,7 @@ GRANT UPDATE ON sales TO data_analyst
 GRANT data_analyst TO reporting_user
 REVOKE data_analyst FROM reporting_user
 DROP ROLE data_analyst
--- create role admin with createdb createrole; (postgre)
+-- CREATE role admin WITH createdb createrole; (postgre)
 -- WITH PASSWORD 'analyst' VALID UNTIL '2024-02-12' 
 
 -- GRANT/REVOKE x ON y TO/FROM z
@@ -509,6 +509,19 @@ PARTITION OF table_name (
 )
 CREATE INDEX ON table_name ('ins_date')
 */
+
+----------------------------------------------
+-- MERGE
+
+MERGE db_test.dbo.TableName AS TARGET
+USING db_test.dbo.TableName_tmp AS source
+ON target.Code_ID = source.Code_ID
+WHEN MATCHED THEN
+	UPDATE
+	SET target.Description = source.Description
+WHEN NOT MATCHED THEN
+	INSERT (Code_ID, Description)
+	VALUES (source.Code_ID, source.Description);
 
 
 
