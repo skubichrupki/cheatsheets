@@ -226,7 +226,7 @@ BEGIN
         END
 END
 
--- ON DATABASE
+-- on database
 GO
 CREATE TRIGGER TrackTableChanges
 ON DATABASE
