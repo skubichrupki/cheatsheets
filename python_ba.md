@@ -4,12 +4,12 @@
 
 <i>table = dataframe object</i>
 
-import file with data
+### import file with data
 
     file_path = 'path\\Results.csv'
     df = pandas.read_csv(file_path)
 
-pandas functions/attributes
+### pandas functions/attributes
 
     df.head() - top 5 rows
     df.shape - number of rows, columns

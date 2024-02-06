@@ -1,7 +1,3 @@
-USE db 
-GO
-
-----------------------------------------------
 ### SQL DATA TYPES
 
     INT
@@ -9,12 +5,10 @@ GO
     BIT, money,
     DATE, datetime, datetime2
 
-----------------------------------------------
 ### CREATE TABLE
 
     CREATE TABLE table_name
     (
-        -- DEFINE columns
         table_ID INT PRIMARY KEY IDENTITY (1,1),
         description VARCHAR(50) NOT NULL DEFAULT('empty')
     )
@@ -25,7 +19,6 @@ GO
     INTO new_table
     FROM existing_table
 
-----------------------------------------------
 ### COLUMNS
 
     ALTER TABLE table_name
@@ -34,10 +27,10 @@ GO
     ALTER TABLE table_name
     DROP COLUMN column_name;
 
-----------------------------------------------
 ### INSERT DATA 
 
-    -- NEW VALUES
+**new values**
+
     INSERT INTO table_name
         (description, short_description)
     VALUES
@@ -45,22 +38,20 @@ GO
         ( 'Earliest Payment Run', 'EPR'),
         ( 'Specific Date', 'SD')
 
-    -- VALUES FROM other TABLE
+**values from existing table**
+
     INSERT INTO table_name
     SELECT * 
     FROM og_table_name
 
-----------------------------------------------
 ### UPDATE DATA
 
     UPDATE table_name
     SET column_1 = 1
     WHERE column_2 < 18
 
-----------------------------------------------
 ### JOINS
 
-----------------------------------------------
 ### UNIONS
 
     SELECT query2
@@ -75,7 +66,6 @@ GO
     FROM query3
     -- UNION ALL, INTERSECT, EXCEPT
 
------------------------------------------------
 ### AGGREGATE FUNCTIONS
 
     SELECT
@@ -86,7 +76,6 @@ GO
         AVG(Amount),
         AVG(DISTINCT Amount)
 
------------------------------------------------
 ### VARIABLES
 
     DECLARE @StartTime TIME
@@ -110,7 +99,6 @@ GO
         description VARCHAR(50)
     )
 
------------------------------------------------
 ### PROCEDURES
 
     GO
@@ -131,7 +119,6 @@ GO
     SELECT @result AS 'result',
     @row_count AS 'row_count' -- row_count_out needs to be declared IN the procedure
 
------------------------------------------------
 ### TRY / CATCH
 
     BEGIN TRY
@@ -163,19 +150,16 @@ GO
         END CATCH
     END
 
------------------------------------------------
 ### CONTRAINTS
 
     ALTER TABLE table_name
     ADD CONSTRAINT check_test_flag CHECK (test_flag IN (0,1))
 
------------------------------------------------
 ### FOREIGN KEYS
 
     ALTER TABLE table_name 
     ADD CONSTRAINT main_person FOREIGN KEY (person_id) REFERENCES table_person (person_ID);
 
------------------------------------------------
 ### ERRORS
     
     -- levels: 0-10: info, 11-16: CONSTRAINT violations etc, 17-24: software, fatal errors
@@ -188,7 +172,6 @@ GO
     ERROR_MESSAGE(),
     ERROR_PROCEDURE()
 
------------------------------------------------
 ### TRIGGERS
 
 **after**
@@ -230,7 +213,7 @@ GO
     END
 
 **on database**
-    GO
+
     CREATE TRIGGER TrackTableChanges
     ON DATABASE
     FOR CREATE_TABLE,
@@ -241,18 +224,14 @@ GO
         VALUES (EVENTDATA(), USER);
 
     -- droping/disabling DATABASE
-    GO
     DISABLE TRIGGER tr_myTrigger
     ON table_name
 
-    GO
     ENABLE TRIGGER tr_myTrigger
     ON table_name
 
-    GO
     DROP TRIGGER tr_myTrigger
 
------------------------------------------------
 ### CASE + IF (+ TRIGGERS)
 
     DECLARE @Insert BIT = 0;
@@ -278,7 +257,6 @@ GO
             PRINT 'Employee doesnt have ANY associated orders';
         END;
 
------------------------------------------------
 ### WHILE LOOPS
 
     DECLARE @i INT
@@ -290,7 +268,6 @@ GO
         SET @i = @i + 1
     END
 
------------------------------------------------
 ### WINDOW FUNCTIONS
 
     SELECT
@@ -312,7 +289,6 @@ GO
     PRECEDING, -- previous ROW
     FOLLOWING -- NEXT ROW
 
------------------------------------------------
 ### CTE
 
     WITH cte AS (
@@ -328,7 +304,6 @@ GO
     WHERE num = prev_num
     AND num = next_num
 
-----------------------------------------------
 ### SQL SYSTEM FUNCTIONS
 
     SELECT
@@ -380,17 +355,14 @@ GO
         SELECT my_date = DATEADD(DAY, 7, GETDATE())
     ) AS my_date_applied
 
-----------------------------------------------
 ### USER DEFINED FUNCTIONS
 
-    GO
     CREATE OR ALTER FUNCTION myFunction()
     RETURNS INT
     BEGIN
         RETURN 0
     END
-    --
-    GO
+
     CREATE FUNCTION dbo.myFunction(@var1 INT)
     RETURNS INT
     AS
@@ -399,8 +371,7 @@ GO
             SELECT @var1 * 42
         ) 
     END 
-    --
-    GO
+
     ALTER FUNCTION myTableFunction(@id INT)
     RETURNS TABLE AS RETURN (
         SELECT *
@@ -408,36 +379,29 @@ GO
         WHERE ID = @id
     )
 
-----------------------------------------------
 ### VIEWS
 
     -- see all views
-    GO
     SELECT * 
     FROM information_schema.views
 
-    GO
     CREATE VIEW high_scores AS
     SELECT * FROM REVIEWS
     WHERE score > 9;
 
-    GO
     DROP VIEW table_v_main
 
-----------------------------------------------
 ### ACCESS / PERMISSIONS
 
 **Logins Users** 
 
     --CREATE login 
 
-    GO
     CREATE LOGIN reporting_user
     WITH PASSWORD = 'myPswrd'
     -- ALTER role marta WITH password 's3cur3p@ssw0rd'; (postgre)
 
     -- CREATE user for the login created above
-    GO
     CREATE USER reporting_user FOR LOGIN reporting_user
 
     -- ROLES
@@ -452,7 +416,6 @@ GO
 
     -- GRANT/REVOKE x ON y TO/FROM z
 
-    GO
     -- give / removeaccess
     GRANT SELECT, UPDATE ON table_v_main TO PUBLIC;
     REVOKE INSERT ON table_v_main FROM reporting_user;
@@ -461,7 +424,6 @@ GO
     -- SELECT, INSERT, UPDATE, DELETE, REFERENCES, ALTER, ALL
 
 
-----------------------------------------------
 ### TRANSACTIONS
 
     BEGIN TRANSACTION my_tran
@@ -471,54 +433,47 @@ GO
     ROLLBACK TRANSACTION my_tran
     COMMIT TRANSACTION my_tran
 
-----------------------------------------------
 ### INDEXES
 
-GO
-CREATE VIEW sales_by_region WITH SCHEMABINDING
-AS
-SELECT region, SUM(sales_amount) AS sales_amount_sum
-FROM sales_table
-GROUP BY region
+    GO
+    CREATE VIEW sales_by_region WITH SCHEMABINDING
+    AS
+    SELECT region, SUM(sales_amount) AS sales_amount_sum
+    FROM sales_table
+    GROUP BY region
 
-GO
-CREATE UNIQUE CLUSTERED INDEX IX_sales_by_region
-ON sales_by_region (region)
+    GO
+    CREATE UNIQUE CLUSTERED INDEX IX_sales_by_region
+    ON sales_by_region (region)
 
-----------------------------------------------
 ## PARTITIONING (postgre)
 
--- vertical
+    CREATE TABLE table_name (
+        table_ID INT PRIMARY KEY IDENTITY (1,1),
+        ins_date DATE NOT NULL
+    )
+    PARTITION BY RANGE (ins_date)
+    CREATE TABLE table_name_2018 
+    PARTITION OF table_name (
+        FOR VALUES FROM ('01-01-2018') TO ('31-12-2018')
+    )
+    CREATE TABLE table_name_2019 
+    PARTITION OF table_name (
+        FOR VALUES IN ('2019');
+    )
+    CREATE INDEX ON table_name ('ins_date')
 
-CREATE TABLE table_name (
-	table_ID INT PRIMARY KEY IDENTITY (1,1),
-	ins_date DATE NOT NULL
-)
-/*
-PARTITION BY RANGE (ins_date)
-CREATE TABLE table_name_2018 
-PARTITION OF table_name (
-    FOR VALUES FROM ('01-01-2018') TO ('31-12-2018')
-)
-CREATE TABLE table_name_2019 
-PARTITION OF table_name (
-    FOR VALUES IN ('2019');
-)
-CREATE INDEX ON table_name ('ins_date')
-*/
-
-----------------------------------------------
 ## MERGE
 
-MERGE db_test.dbo.TableName AS TARGET
-USING db_test.dbo.TableName_tmp AS source
-ON target.Code_ID = source.Code_ID
-WHEN MATCHED THEN
-	UPDATE
-	SET target.Description = source.Description
-WHEN NOT MATCHED THEN
-	INSERT (Code_ID, Description)
-	VALUES (source.Code_ID, source.Description);
+    MERGE db_test.dbo.TableName AS TARGET
+    USING db_test.dbo.TableName_tmp AS source
+    ON target.Code_ID = source.Code_ID
+    WHEN MATCHED THEN
+        UPDATE
+        SET target.Description = source.Description
+    WHEN NOT MATCHED THEN
+        INSERT (Code_ID, Description)
+        VALUES (source.Code_ID, source.Description);
 
         
 
