@@ -475,6 +475,16 @@
         INSERT (Code_ID, Description)
         VALUES (source.Code_ID, source.Description);
 
+## check table log
+
+    SELECT *
+    FROM sys.tables AS tables
+    INNER JOIN sys.dm_db_index_usage_stats AS usage
+    ON tables.object_id = usage.object_id
+    WHERE database_id = DB_ID()
+    AND name LIKE 'myTable'
+
+
         
 
 
