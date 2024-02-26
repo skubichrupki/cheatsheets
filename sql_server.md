@@ -484,6 +484,20 @@
     WHERE database_id = DB_ID()
     AND name LIKE 'myTable'
 
+## open JSON file in SQL view
+
+    Select JSON_line
+    FROM my_view as view_data
+    CROSS APPLY OPENJSON(viewData.JSONLine) WITH (
+        Description nvarchar(250),
+        DateTime nvarchar(250),
+        Process nvarchar(max) AS JSON
+    ) as JSON_level1
+    CROSS APPLY OPENJSON(JSON_level1.Process) WITH (
+        Description nvarchar(250),
+        Year int
+    ) as JSON_level2
+
 
         
 
