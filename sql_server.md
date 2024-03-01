@@ -498,6 +498,17 @@
         Year int
     ) as JSON_level2
 
+## values as a CSV string in one row
+
+    ,string_agg(product, ',') within group (order by product asc) as products
+    -- works like aggregate function, cannot be used in window functions
+    SELECT sell_date
+    ,COUNT(product)
+    ,STRING_AGG(product, ',') WITHIN GROUP (ORDER BY product asc) AS products 
+    FROM activities
+    GROUP BY sell_date
+
+
 
         
 
