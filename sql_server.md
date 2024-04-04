@@ -311,6 +311,7 @@
     CAST(GETDATE() AS nvarchar(50)) AS string_date
     ,CAST('420,69' AS DECIMAL(3,2)) AS string_to_decimal 
     ,CONVERT(VARCHAR(20), birthdate, 11)
+    ,TRY_CONVERT(VARCHAR(20), birthdate, 11) -- nulls the values that didnt work in convert
     ,CONVERT(DECIMAL(3,2), '420.69') AS string_to_decimal -- only IN SQL server
     ,PARSE(birthdate AS DATE USING de-de)
     ,GETDATE()
