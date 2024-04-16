@@ -1,60 +1,41 @@
 ### terminal ###
 
-    pwd - print working directory
-    ls - list
-    ls -a - list all (hidden files)
-    cd - change directory
-    nano finance.csv - modify content
+    pwd
+    ls
+    ls -a (list all hidden files)
+    ls -l (list as a list)
+    cd (change directory)
+    nano finance.csv (modify content)
         save: ctrl+o
         exit: ctrl+x
-    echo - create/edit file
-    echo "learn git" > todo.txt (>> to add content to existing file)
+    echo (create/edit file)
 
-### general git ###
+### git ###
 
     git --version
     git status
-    git add .
-    git commit -m "changes"
-
-### update ###
 
     git clone https://github.com/skubichrupki/SQL
     git fetch origin
     git pull origin
-    svn checkout repository_URL [local_directory]
-    svn update
 
-### checks ###
+    git status
+    git diff CHEATSHEET.sql / git diff (compare unstaged file with last commited version)
+    git diff --cached (staged but not commited)
+    git diff -r HEAD CHEATSHEET.sql (compare staged file with last commited version)
+    q (exit git diff)
 
-    git status | svn status
-    git diff CHEATSHEET.sql / git diff
-    git diff --cached -> staged but not commited
-    q -> exit git diff
-    svn diff CHEATSHEET.sql / svn diff
+    git add .
+    git add cheatsheet.sql
 
-### stage ###
-
-    git add . 
+    git restore main.py
     git restore --staged CHEATSHEET.sql
-    svn add *
-    svn revert CHEATSHEET.sql
 
-### commit ###
+    git branch
+    git branch main
 
     git commit -m "commit message"
     git push origin main
-    svn commit -m "commit message"
-
-### branch ###
-
-    git branch
-
-### restoring ###
-
-    git restore main.py
-    git restore --staged main.env -> like unchecking the checkbox in desktop
-    svn revert CHEATSHEET.sql
 
 ### delete commits ###
 
