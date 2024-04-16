@@ -1,14 +1,12 @@
-----------------------------------------------
--- transactions
+
+### transactions
 
     START TRANSACTION;
     SAVEPOINT my_savepoint;
     ROLLBACK TO my_savepoint;
     COMMIT;
 
-----------------------------------------------
--- procedure / while loop
-
+### procedure / while loop
 
     DELIMITER //
     CREATE PROCEDURE example_while_loop(IN n int)
@@ -24,8 +22,6 @@
     
     CALL example_while_loop();
 
-
-----------------------------------------------
--- exporting db 
+### exporting db 
 
     & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump" -u skubi -p tda > tda_backup.sql
