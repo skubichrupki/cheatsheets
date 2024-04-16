@@ -1,4 +1,4 @@
-### installations (mysql)
+### installations
 
     sudo (admin)
     apt (advanced packaging tool)
