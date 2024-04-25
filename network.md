@@ -33,8 +33,24 @@
 - Hub
 - Switch
 - Router
-- Modem
+- Firewall
 - SOHO (Single Office Home Office)
+- Modem
 - NIC (Network Interface Controller)
 
 ### Devices (descriptions)
+Hub
+Switch
+Router
+Firewall
+SOHO (Single Office Home Office)
+Modem
+NIC (Network Interface Controller)
+
+### Topologies
+- Point-to-Point
+- Linear
+- Bus
+- Star
+- Ring
+- Mesh
