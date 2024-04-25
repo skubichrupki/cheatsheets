@@ -39,13 +39,13 @@
 - NIC (Network Interface Controller)
 
 ### Devices (descriptions)
-Hub
-Switch
-Router
-Firewall
-SOHO (Single Office Home Office)
-Modem
-NIC (Network Interface Controller)
+#### Hub
+#### Switch
+#### Router
+#### Firewall
+#### SOHO (Single Office Home Office)
+#### Modem
+#### NIC (Network Interface Controller)
 
 ### Topologies
 - Point-to-Point
