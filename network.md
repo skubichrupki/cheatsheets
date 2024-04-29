@@ -12,6 +12,9 @@
 
 ### Protocols
 - TCP (Transmission Control Protocol)
+- DNS (Domain Name System) tlumaczy nazwy na adresy IP
+  - A, MX, NS
+- ICMP (used by ping)
 
 ### Device numbers
 - MAC (Medium Access Control)
@@ -54,3 +57,10 @@
 - Star
 - Ring
 - Mesh
+
+### cmd commands
+
+  ipconfig
+  ipconfig /all
+  ping (check if server is ok)
+  nslookup (?)
