@@ -1,5 +1,4 @@
-## DDL
-### CREATE TABLE
+#### CREATE TABLE
 
     CREATE TABLE table_name (
         table_ID INT PRIMARY KEY IDENTITY (1,1),
@@ -12,7 +11,7 @@
     INTO new_table
     FROM existing_table
 
-### ALTER
+#### ALTER
 
     ALTER TABLE table_name
     ADD column_name VARCHAR(50)
@@ -22,7 +21,16 @@
 
     ALTER TABLE table_name
     ADD CONSTRAINT check_test_flag CHECK (test_flag IN (0,1))
+    ALTER TABLE table_name DROP CONSTRAINT constraint_name;
 
+#### DROP
+
+    DROP TABLE table_name;
+    DROP VIEW table_v_name;
+    DROP PROCEDURE procedure_name;
+    DROP INDEX index_name ON table_name;
+    DROP SCHEMA schema_name;
+    
 #### FOREIGN KEYS
 
     ALTER TABLE table_name 
@@ -478,28 +486,22 @@
     GROUP BY sell_date
     -- works like aggregate function, cannot be used in window functions
 
+### ADMINISTRATION
 #### LOGIN / USER
 
     CREATE LOGIN reporting_user WITH PASSWORD = 'myPswrd'
-    -- ALTER role marta WITH password 's3cur3p@ssw0rd'; (postgre)
-    
     CREATE USER reporting_user FOR LOGIN reporting_user
+    DROP LOGIN login_name;
+    DROP USER user_name;
     
-    -- ROLES
+#### ROLES
+
     CREATE ROLE data_analyst
     GRANT UPDATE ON sales TO data_analyst
-    
     GRANT data_analyst TO reporting_user
     REVOKE data_analyst FROM reporting_user
-    DROP ROLE data_analyst
-    -- CREATE role admin WITH createdb createrole; (postgre)
-    -- WITH PASSWORD 'analyst' VALID UNTIL '2024-02-12' 
-    
-    -- GRANT/REVOKE x ON y TO/FROM z
-    
-    -- give / removeaccess
-    GRANT SELECT, UPDATE ON table_v_main TO PUBLIC;
+    GRANT SELECT, INSERT ON table_v_main TO reporting_user;
     REVOKE INSERT ON table_v_main FROM reporting_user;
+    DROP ROLE data_analyst
     
-    -- privileges
-    -- SELECT, INSERT, UPDATE, DELETE, REFERENCES, ALTER, ALL
+    
