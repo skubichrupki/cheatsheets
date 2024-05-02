@@ -1,3 +1,4 @@
+### DDL
 #### CREATE TABLE
 
     CREATE TABLE table_name (
@@ -5,7 +6,7 @@
         description VARCHAR(50) NOT NULL DEFAULT('empty') 
     )
 
-### CREATE TABLE FROM EXISTING TABLE
+#### CREATE TABLE FROM EXISTING TABLE
 
     SELECT *
     INTO new_table
@@ -69,9 +70,8 @@
         description VARCHAR(50)
     )
 
-## DML
-### INSERT
-#### NEW VALUES
+### DML
+#### INSERT 
 
     INSERT INTO table_name
         (description, short_description)
@@ -276,8 +276,9 @@
     FROM cte
     WHERE num = prev_num
     AND num = next_num
-
-### WINDOW FUNCTIONS
+    
+### SYSTEM FUNCTIONS
+#### WINDOW FUNCTIONS
 
     ROW_NUMBER(),
     RANK(),
@@ -296,15 +297,14 @@
     PRECEDING, -- includes a specified number of rows before the current row.
     FOLLOWING -- includes a specified number of rows after the current row.
 
-### SYSTEM FUNCTIONS
 #### AGGREGATE
 
-        COUNT(Amount),
-        SUM(Amount),
-        MAX(Amount),
-        MIN(Amount),
-        AVG(Amount),
-        AVG(DISTINCT Amount)
+    COUNT(Amount),
+    SUM(Amount),
+    MAX(Amount),
+    MIN(Amount),
+    AVG(Amount),
+    AVG(DISTINCT Amount)
 
 #### DATES 
 
@@ -319,10 +319,11 @@
     ,GETUTCDATE(), CURRENT_TIMESTAMP
     ,SYSDATETIME(), SYSUTCDATETIME()
     ,YEAR(@Date), MONTH(@Date), DAY(@Date) 
-    ,DATEPART(YEAR, @Date) ,DATEPART(DAYOFYEAR, @Date)
-    ,DATENAME(WEEKDAY, @Date), DATENAME(MONTH, @Date) -- only these 2 RETURN real string
+    ,DATEPART(DAYOFYEAR, @Date)
+    ,DATENAME(WEEKDAY, @Date)
     ,DATEADD(DAY, 14, @Date)
     ,DATEDIFF(HOUR, @ins_date, GETDATE())
+    
     ,FORMAT(@Date, 'd', 'pl-PL'), FORMAT(@Date, 'dd-MM-YYYY'), FORMAT(123456, '###-###')
     ,FORMAT(CAST('2018-01-01 14:00' AS datetime2), N'HH:mm') -- 14:00
 
@@ -331,14 +332,17 @@
     ,LEN(@string)
     ,CHARINDEX('pizza', 'i LIKE pizza AND burgir', 5) -- third parameter IS optional, USE > 0 OR = 0 (IN WHERE)
     ,PATINDEX('%[xwq]%', last_name) -- can USE wildcards % _ []
-    ,LOWER(), UPPER()
-    ,LEFT(@mystring, 3)
-    ,RIGHT(@mystring, 3) -- first/last 3 characters
-    ,LTRIM(@string), RTRIM(@string), TRIM() -- trimming blanks
+    ,LOWER(@mystring)
+    ,UPPER(@mystring)
+    ,LEFT(@mystring, 3) -- last 3 characters
+    ,RIGHT(@mystring, 3) -- first 3 characters
+    ,LTRIM(@string)
+    ,RTRIM(@string)
+    ,TRIM() -- trimming blanks
     ,REPLACE('I LIKE pizza', 'pizza', 'burgir') -- i LIKE burgir
     ,SUBSTRING('I LIKE pizza', 7, 5) -- pizza (position, numer of letters)
     ,CONCAT('string1', 'string2'), CONCAT_WS(' ', 'string1', 'string2') -- IN ws you SELECT a separator
-    ,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC)-- list of strings - useful WITH GROUP BY (YEAR for example)
+    ,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC) -- list of strings - useful WITH GROUP BY (YEAR for example)
     ,STRING_AGG(CONCAT(first_name, CHAR(13))) -- carriage RETURN
 
 #### MATH 
@@ -352,14 +356,6 @@
     ,SQUARE(@amount) -- ^2
     ,SQRT(@amount) -- ^(1/2)
     ,RAND() -- random FROM 0-1, can also be used IN ORDER BY to RETURN random ROWS
-
-#### APPLY
-
-    -- apply the result of the subquery (in this case, a single-row result) to each row from table_name. 
-    FROM table_name
-    CROSS APPLY (
-        SELECT my_date = DATEADD(DAY, 7, GETDATE())
-    ) AS my_date_applied
 
 ### USER DEFINED FUNCTIONS
 
@@ -462,6 +458,14 @@
     ON tables.object_id = usage.object_id
     WHERE database_id = DB_ID()
     AND name LIKE 'myTable'
+
+#### APPLY
+
+    -- apply the result of the subquery (in this case, a single-row result) to each row from table_name. 
+    FROM table_name
+    CROSS APPLY (
+        SELECT my_date = DATEADD(DAY, 7, GETDATE())
+    ) AS my_date_applied
 
 ### open JSON file in SQL view
 
