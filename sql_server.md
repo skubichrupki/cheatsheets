@@ -1,6 +1,6 @@
 ### DDL
 #### CREATE TABLE
-'''SQL
+''' sql
     CREATE TABLE table_name (
         table_ID INT PRIMARY KEY IDENTITY (1,1),
         description VARCHAR(50) NOT NULL DEFAULT('empty') 
