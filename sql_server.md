@@ -1,9 +1,17 @@
 ### SQL DATA TYPES
 
-    INT
-    DECIMAL, FLOAT,
-    BIT, money,
-    DATE, datetime, datetime2
+    TINYINT, SMALLINT, INT, BIGINT  (1,2,4,8 bytes)
+    ,FLOAT
+    ,DECIMAL(5,2)
+    ,NUMERIC(10,5), 
+    BIT (0,1) 
+    ,MONEY
+    ,DATE, TIME
+    ,DATETIME (precision to 3ms), SMALLDATETIME (precision to 
+    ,DATETIME2
+    ,TABLE
+    ,uniqueidentifier
+    
 
 ### CREATE TABLE
 
@@ -29,7 +37,7 @@
 
 ### INSERT DATA 
 
-**new values**
+#### new values
 
     INSERT INTO table_name
         (description, short_description)
@@ -38,7 +46,7 @@
         ( 'Earliest Payment Run', 'EPR'),
         ( 'Specific Date', 'SD')
 
-**values from existing table**
+#### values from existing table
 
     INSERT INTO table_name
     SELECT * 
@@ -304,7 +312,7 @@
     WHERE num = prev_num
     AND num = next_num
 
-### SQL SYSTEM FUNCTIONS
+### SYSTEM FUNCTIONS
 
     SELECT
     --dates
@@ -314,6 +322,7 @@
     ,TRY_CONVERT(VARCHAR(20), birthdate, 11) -- nulls the values that didnt work in convert
     ,CONVERT(DECIMAL(3,2), '420.69') AS string_to_decimal -- only IN SQL server
     ,PARSE(birthdate AS DATE USING de-de)
+    
     ,GETDATE()
     ,GETUTCDATE(), CURRENT_TIMESTAMP
     ,SYSDATETIME(), SYSUTCDATETIME()
@@ -325,7 +334,8 @@
     ,FORMAT(@Date, 'd', 'pl-PL'), FORMAT(@Date, 'dd-MM-YYYY'), FORMAT(123456, '###-###')
     ,FORMAT(CAST('2018-01-01 14:00' AS datetime2), N'HH:mm') -- 14:00
 
-    -- strings
+#### strings
+
     ,LEN(@string)
     ,CHARINDEX('pizza', 'i LIKE pizza AND burgir', 5) -- third parameter IS optional, USE > 0 OR = 0 (IN WHERE)
     ,PATINDEX('%[xwq]%', last_name) -- can USE wildcards % _ []
@@ -339,7 +349,8 @@
     ,STRING_AGG(first_name, ',' ) WITHIN GROUP (ORDER BY first_name ASC)-- list of strings - useful WITH GROUP BY (YEAR for example)
     ,STRING_AGG(CONCAT(first_name, CHAR(13))) -- carriage RETURN
 
-    -- mathematical
+#### mathematical 
+
     ,ABS(@amount) -- non negative VALUE
     ,SIGN(@amount) -- RETURN -1,0,1 based IF negative
     ,CEILING(@amount) -- rounds to TOP
@@ -350,7 +361,8 @@
     ,SQRT(@amount) -- ^(1/2)
     ,RAND() -- random FROM 0-1, can also be used IN ORDER BY to RETURN random ROWS
 
-    - apply
+#### apply
+
     FROM table_name
     CROSS APPLY (
         SELECT my_date = DATEADD(DAY, 7, GETDATE())
@@ -394,7 +406,7 @@
 
 ### ACCESS / PERMISSIONS
 
-**Logins Users** 
+#### logins / users
 
     --CREATE login 
 
@@ -447,7 +459,7 @@
     CREATE UNIQUE CLUSTERED INDEX IX_sales_by_region
     ON sales_by_region (region)
 
-## PARTITIONING (postgre)
+### PARTITIONING (postgre)
 
     CREATE TABLE table_name (
         table_ID INT PRIMARY KEY IDENTITY (1,1),
@@ -464,7 +476,7 @@
     )
     CREATE INDEX ON table_name ('ins_date')
 
-## MERGE
+### MERGE
 
     MERGE db_test.dbo.TableName AS TARGET
     USING db_test.dbo.TableName_tmp AS source
@@ -476,7 +488,7 @@
         INSERT (Code_ID, Description)
         VALUES (source.Code_ID, source.Description);
 
-## check table log
+### check table log
 
     SELECT *
     FROM sys.tables AS tables
@@ -485,7 +497,7 @@
     WHERE database_id = DB_ID()
     AND name LIKE 'myTable'
 
-## open JSON file in SQL view
+### open JSON file in SQL view
 
     Select JSON_line
     FROM my_view as view_data
@@ -499,7 +511,7 @@
         Year int
     ) as JSON_level2
 
-## values as a CSV string in one row
+### values as a CSV string in one row
 
     SELECT sell_date
     ,COUNT(product)
