@@ -8,11 +8,11 @@ CREATE TABLE table_name (
 ```
 
 #### CREATE TABLE FROM EXISTING TABLE
-
+``` sql
     SELECT *
     INTO new_table
     FROM existing_table
-
+```
 #### ALTER
 
     ALTER TABLE table_name
