@@ -9,16 +9,16 @@ CREATE TABLE table_name (
 
 #### CREATE TABLE FROM EXISTING TABLE
 ``` sql
-    SELECT *
-    INTO new_table
-    FROM existing_table
+SELECT *
+INTO new_table
+FROM existing_table
 ```
 #### ALTER
-
-    ALTER TABLE table_name
-    ADD column_name VARCHAR(50)
-    DROP COLUMN column_name;
-
+``` sql
+ALTER TABLE table_name
+ADD column_name VARCHAR(50)
+DROP COLUMN column_name;
+```
 #### CONTRAINTS
 
     ALTER TABLE table_name
