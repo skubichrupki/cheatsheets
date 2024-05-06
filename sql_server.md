@@ -549,5 +549,24 @@ REVOKE data_analyst FROM reporting_user
 GRANT SELECT, INSERT ON table_v_main TO reporting_user;
 REVOKE INSERT ON table_v_main FROM reporting_user;
 DROP ROLE data_analyst
-``` 
+```
+
+#### CURSOR
+FIRST is used to fetch only the first row from the cursor table. 
+LAST is used to fetch only the last row from the cursor table. 
+NEXT is used to fetch data in a forward direction from the cursor table. 
+PRIOR is used to fetch data in a backward direction from the cursor table. 
+ABSOLUTE n is used to fetch the exact nth row from the cursor table. 
+RELATIVE n is used to fetch the data in an incremental way as well as a decremental way. 
+``` sql
+DECLARE s1 CURSOR FOR SELECT * FROM studDetails
+OPEN s1
+FETCH FIRST FROM s1
+FETCH LAST FROM s1
+FETCH NEXT FROM s1
+FETCH PRIOR FROM s1
+FETCH ABSOLUTE 7 FROM s1
+FETCH RELATIVE -2 FROM s1
+CLOSE s1
+```
 
