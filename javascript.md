@@ -66,6 +66,48 @@ fetch(apiUrl)
   });
 ```
 
+### backend javascript
+npm install express pg
+``` js
+const express = require('express');
+const { Pool } = require('pg');
+const app = express();
+const PORT = 3000;
+
+// PostgreSQL database configuration
+const pool = new Pool({
+  user: 'your_username',
+  host: 'localhost',
+  database: 'your_database_name',
+  password: 'your_password',
+  port: 5432,
+});
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Route to get a specific user by ID
+app.get('/users/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+    const rows = result.rows;
+    if (rows.length === 0) {
+      res.status(404).json({ error: 'User not found' });
+    } else {
+      res.json(rows[0]);
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+```
+
 #### variables
 ``` js
 let x;
@@ -169,44 +211,4 @@ Session Storage – in local storage data has no expiration time,
 data stored in session storage gets cleared when the page session ends. 
 
 
-### backend javascript
-npm install express pg
-``` js
-const express = require('express');
-const { Pool } = require('pg');
-const app = express();
-const PORT = 3000;
 
-// PostgreSQL database configuration
-const pool = new Pool({
-  user: 'your_username',
-  host: 'localhost',
-  database: 'your_database_name',
-  password: 'your_password',
-  port: 5432,
-});
-
-// Middleware to parse JSON bodies
-app.use(express.json());
-
-// Route to get a specific user by ID
-app.get('/users/:id', async (req, res) => {
-  const id = req.params.id;
-  try {
-    const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-    const rows = result.rows;
-    if (rows.length === 0) {
-      res.status(404).json({ error: 'User not found' });
-    } else {
-      res.json(rows[0]);
-    }
-  } catch (error) {
-    console.error('Error fetching user:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
-```
