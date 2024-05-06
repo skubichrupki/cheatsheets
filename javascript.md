@@ -1,18 +1,18 @@
 ### praca w gates
-Pracowałem jako IT Application Analyst nad aplikacjami fullstack zbudowanymi w dwóch różnych frameworkach. 
-Pierwszy to jQuery, ColdFusion SQL Server
-Drugi React js, Express JS, SQL Server
-w pierwszym frameworku API pisane były poprzez jQuery AJAX, $.ajax, $.post etc.
-w drguim axios lub fetch przy użyciu zasad REST
-aplikacje polegały na tym samym bez różnicy jaki framework został użyty. 10% to front end, tam dodawałem tylko inputy i zmieniałem ID, nazwy, standaryzacja
-30% backend, pisane były funcje (w coldfusion, potem javascript) które były używane do komunikacji z SQL Server, w samym SQL Server działałem w MS SQL Management Studio
-Personalnie używam DBeaver to MySQL (Linux Ubuntu) i SQL Server (Windows)
-STAR:
-Problem: Brak priorytyzacji zadań, używanie OneNote do wrzucania tasków developerom
-Zaimplementowałem Listy Sharepoint do obsługi improvementów, dzięki temu mogłem nadać klka customizowanych statusów, oraz kto komu przypisał taska
-Ponad To: napisałem flow w PowerAutomate dzięki któremu developerzy oraz requestorzy dostawali maile odnośnie taksów
-Wynik: Management został ustawiony co pomogło w priorytyzacji zadań developerom, 
-oraz IT od baz danych, ponieważ w liscie ustawilem flage, czy zmiana wpływa na bazy danych (problem w query KPI, SLA) system jest używany do dzisiaj.
+Pracowałem jako IT Application Analyst nad aplikacjami fullstack zbudowanymi w dwóch różnych frameworkach. <br>
+Pierwszy to jQuery, ColdFusion SQL Server <br>
+Drugi React js, Express JS, SQL Server <br>
+w pierwszym frameworku API pisane były poprzez jQuery AJAX, $.ajax, $.post etc. <br>
+w drugim axios lub fetch przy użyciu zasad REST <br>
+aplikacje polegały na tym samym bez różnicy jaki framework został użyty. 10% to front end, tam dodawałem tylko inputy i zmieniałem ID, nazwy, standaryzacja <br>
+30% backend, pisane były funcje (w coldfusion, potem javascript) które były używane do komunikacji z SQL Server, w samym SQL Server działałem w MS SQL Management Studio <br>
+Personalnie używam DBeaver to MySQL (Linux Ubuntu) i SQL Server (Windows) <br>
+STAR: <br>
+Problem: Brak priorytyzacji zadań, używanie OneNote do wrzucania tasków developerom <br>
+Zaimplementowałem Listy Sharepoint do obsługi improvementów, dzięki temu mogłem nadać klka customizowanych statusów, oraz kto komu przypisał taska <br>
+Ponad To: napisałem flow w PowerAutomate dzięki któremu developerzy oraz requestorzy dostawali maile odnośnie taksów <br>
+Wynik: Management został ustawiony co pomogło w priorytyzacji zadań developerom,  <br>
+oraz IT od baz danych, ponieważ w liscie ustawilem flage, czy zmiana wpływa na bazy danych (problem w query KPI, SLA) system jest używany do dzisiaj. <br>
 ``` js
  $.ajax({
         url: apiUrl,
@@ -201,6 +201,12 @@ REST RULES:
 Resource (Zasób): data with name (noun like 'user'), unique, has URI (it's name and address)
 Naming Convention: liczba pojedyncza vs mnoga, standaryzacja, bez czasowników
 JSON, YAML, XML (YAML ma wcięcia jak Python), XML ma Tagi
+
+API: /api/v1/users/:id
+punkt wejścia/wersja/kolekcja zasobów/identyfikator zasobu
+- /api/v1/users/:id/comments/:comment-id
+paramentry adresu URL:
+- api/v1/users?fields=name,email&offset=10 (parametry: nazwa=wartość&)
 
 
 ### session storage, local storage
