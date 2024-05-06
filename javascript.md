@@ -236,5 +236,11 @@ It will stay until it is manually cleared through settings or program.
 Session Storage – in local storage data has no expiration time, 
 data stored in session storage gets cleared when the page session ends. 
 
+### status codes
+200: OK
+404: Not Found
+500: Internal Server Error
+And more: There are status codes for various scenarios, such as redirection (3xx), client errors (4xx), and server errors (5xx).
+
 
 
