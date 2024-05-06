@@ -140,6 +140,26 @@ round(); // rounds value to nearest integer, returns int
 length(); // returns the length of string, array etc
 test();
 exec(); //
+require(): Used to import modules in Node.js.
+module.exports: Used to export functions, objects, or primitive values from a module.
+process.env: Provides access to environment variables.
+console.log(): Outputs messages to the console.
+setTimeout(): Executes a function after a specified delay.
+setInterval(): Executes a function at specified intervals.
+clearTimeout(): Cancels a timeout previously established with setTimeout().
+clearInterval(): Cancels an interval previously established with setInterval().
+JSON.stringify(): Converts a JavaScript object or value to a JSON string.
+JSON.parse(): Parses a JSON string, converting it to a JavaScript object.
+fs.readFileSync(): Reads the contents of a file synchronously.
+fs.writeFileSync(): Writes data to a file synchronously.
+fs.readFile(): Reads the contents of a file asynchronously.
+fs.writeFile(): Writes data to a file asynchronously.
+fs.existsSync(): Checks if a file or directory exists.
+fs.mkdirSync(): Creates a directory synchronously.
+fs.mkdir(): Creates a directory asynchronously.
+fs.unlinkSync(): Deletes a file synchronously.
+fs.unlink(): Deletes a file asynchronously.
+fs.readdirSync(): Reads the contents of a directory synchronously.
 ```
 
 #### access element
