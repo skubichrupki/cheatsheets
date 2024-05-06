@@ -84,3 +84,15 @@ SELECT TO_TIMESTAMP('2024-05-05', 'YYYY-MM-DD');
 ``` sql
 SELECT 'Hello ' || 'World';
 ```
+
+Check Constraints
+Not-Null Constraints
+Unique Constraints
+Primary Keys
+Foreign Keys
+Exclusion Constraints
+
+Backup of database:
+SQL dump
+File system-level backup
+On-line backup
