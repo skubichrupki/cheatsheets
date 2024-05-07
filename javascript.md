@@ -209,15 +209,36 @@ WEB REST API:
 GET /movies (select, read)
 POST /movies (create)
 PUT /movies/:id (update)
+PATCH
 DELETE /movies/:id (delete)
+OPTIONS
+
+GET 
+- /users
+- /users/52
+- /users/52,22,24
+<br>
+OPTIONS
+- /users
+<br>
+POST
+- /users
+- /users/3/movies
+<br>
+PUT
+- /users/5
+- /users/62/movies/3
+- /users/:id/email
+DELETE
+- /users/:id 
 
 REST RULES:
-1: Uniform Interface: one api for client/server communication <br>
-2: Client-server: client and server application should be seperated <br>
-3: Stateless: server should not store info, client should send it every time <br>
-4: Cacheable: API should support caching data to increase performance <br>
-5: Layered system: Client does not need to know about server actions <br>
-6: (optional) Code on Demand: server response is fragment of code that client can use  <br>
+1. Uniform Interface: one api for client/server communication 
+2. Client-server: client and server application should be seperated
+3. Stateless: server should not store info, client should send it every time 
+4. Cacheable: API should support caching data to increase performance
+5. Layered system: Client does not need to know about server actions 
+6. (optional) Code on Demand: server response is fragment of code that client can use  
 <br>
 Resource (Zasób): data with name (noun like 'user'), unique, has URI (it's name and address)
 Naming Convention: liczba pojedyncza vs mnoga, standaryzacja, bez czasowników
