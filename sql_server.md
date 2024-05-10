@@ -580,3 +580,17 @@ WHERE obj.type = 'V'
 AND mod.definition like '%MDMR%'
 ```
 
+#### SYSTEM OBJECTS QUERY (tables)
+``` sql
+SELECT 
+tab.name AS table_name,
+col.name AS column_name
+FROM 
+sys.columns AS col
+INNER JOIN sys.tables AS tab ON col.object_id = tab.object_id
+INNER JOIN sys.types AS typ ON col.user_type_id = typ.user_type_id
+WHERE typ.name = 'date'
+AND tab.type = 'U' -- filter only user-defined tables
+```
+
+
