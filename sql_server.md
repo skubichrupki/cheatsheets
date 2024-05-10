@@ -570,3 +570,13 @@ FETCH RELATIVE -2 FROM s1
 CLOSE s1
 ```
 
+#### SYSTEM OBJECTS QUERY (views)
+``` sql
+SELECT *
+FROM sys.objects AS obj
+INNER JOIN sys.sql_modules as mod
+ON obj.object_id = mod.object_id
+WHERE obj.type = 'V'
+AND mod.definition like '%MDMR%'
+```
+
