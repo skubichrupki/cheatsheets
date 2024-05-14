@@ -17,8 +17,8 @@ data.info() # data type info etc
 data.describe() # basic statistics
 data.shape # number of rows and columns
 data.sort_values("created_at", ascending=False) # desc, can also pass an array on both arguments
+data.sort_values(['name', 'age'], ascending=[True, False])
 ```
-
 pandas where
 ```python
 data[[created_at, updated_at]]
@@ -27,9 +27,12 @@ data[data[employee_id] > 50]
 
 isNew = data[created_at] > '2022-01-01'
 isRed = data[color] = 'red'
-data[isnew & isRed]
+data[isnew & isRed], data[isnew | isRed] # and, or
 
-isNewStatus = data[status_id].isin([9,10,12])
+isNewStatus_id = data[status_id].isin([9,10,12])
+isMewStatus_id_display = data[isNewStatus_id]
+
+data
 data[isNewStatus]
 ```
 
