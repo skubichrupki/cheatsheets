@@ -1,5 +1,5 @@
-### DDL
-#### CREATE TABLE
+ DDL
+ CREATE TABLE
 ``` sql
 CREATE TABLE table_name (
 table_ID INT PRIMARY KEY IDENTITY (1,1),
@@ -7,28 +7,28 @@ description VARCHAR(50) NOT NULL DEFAULT('empty')
 )
 ```
 
-#### CREATE TABLE FROM EXISTING TABLE
+ CREATE TABLE FROM EXISTING TABLE
 ``` sql
 SELECT *
 INTO new_table
 FROM existing_table
 ```
 
-#### ALTER
+ ALTER
 ``` sql
 ALTER TABLE table_name
 ADD column_name VARCHAR(50)
 DROP COLUMN column_name;
 ```
 
-#### CONTRAINTS
+ CONTRAINTS
 ``` sql
 ALTER TABLE table_name
 ADD CONSTRAINT check_test_flag CHECK (test_flag IN (0,1))
 ALTER TABLE table_name DROP CONSTRAINT constraint_name;
 ```
 
-#### DROP
+ DROP
 ``` sql
 DROP TABLE table_name;
 DROP VIEW table_v_name;
@@ -37,13 +37,13 @@ DROP INDEX index_name ON table_name;
 DROP SCHEMA schema_name;
 ``` 
 
-#### FOREIGN KEYS
+ FOREIGN KEYS
 ``` sql
 ALTER TABLE table_name 
 ADD CONSTRAINT main_person FOREIGN KEY (person_id) REFERENCES table_person (person_ID);
 ``` 
 
-### DATA TYPES
+ DATA TYPES
 ``` sql
 TINYINT, SMALLINT, INT, BIGINT  (1,2,4,8 bytes)
 ,FLOAT
@@ -59,7 +59,7 @@ BIT (0,1)
 ,CURSOR
 ``` 
 
-### VARIABLES
+ VARIABLES
 ``` sql
 DECLARE @StartTime TIME = '08:00'
 DECLARE @StartTime TIME
@@ -78,8 +78,8 @@ DECLARE @tmp_table_name TABLE (
 )
 ``` 
 
-### DML
-#### INSERT 
+ DML
+ INSERT 
 ``` sql
 INSERT INTO table_name
     (description, short_description)
@@ -89,28 +89,28 @@ VALUES
     ( 'Specific Date', 'SD')
 ``` 
 
-#### VALUES FROM EXISTING TABLE
+ VALUES FROM EXISTING TABLE
 ``` sql
 INSERT INTO table_name
 SELECT * 
 FROM og_table_name
 ``` 
 
-### UPDATE
+ UPDATE
 ``` sql
 UPDATE table_name
 SET column_1 = 1
 WHERE column_2 < 18
 ``` 
 
-### JOINS
+ JOINS
 ``` sql
 FROM sys.views as v
 INNER JOIN sys.sql_modules as m
 ON m.object_id = v.object_id
 ``` 
 
-### UNIONS
+ UNIONS
 ``` sql
 SELECT query2
 FROM query2
@@ -126,7 +126,7 @@ INTERSECT,
 EXCEPT
 ``` 
 
-### PROCEDURES
+ PROCEDURES
 ``` sql
 GO
 CREATE PROCEDURE usp_table_name_upd (@var1 DATE, @var2 INT)
@@ -145,7 +145,7 @@ EXEC @result = usp_table_name_upd @var1='02.01.1999', @var2=420, @row_count_out 
 SELECT @result AS 'result'
 ``` 
 
-### TRY / CATCH ERRORS
+ TRY / CATCH ERRORS
 ``` sql
 BEGIN TRY
     INSERT INTO table_debug (test_flag, DATE)
@@ -179,14 +179,14 @@ BEGIN
 END
 ``` 
 
-### ERRORS
+ ERRORS
 ``` sql   
 -- levels: 0-10: info, 11-16: CONSTRAINT violations etc, 17-24: software, fatal errors
 -- 11-19 ARE catchable, >= 20 cant be catched  
 ``` 
 
-### TRIGGERS
-#### AFTER
+ TRIGGERS
+ AFTER
 ``` sql
 GO
 CREATE TRIGGER tr_afterTrigger ON table_name AFTER DELETE
@@ -199,7 +199,7 @@ BEGIN
 END
 ``` 
 
-#### INSTEAD OF 
+ INSTEAD OF 
 ``` sql
 GO
 CREATE TRIGGER tr_insteadOfTrigger ON table_name INSTEAD OF INSERT
@@ -220,7 +220,7 @@ BEGIN
 END
 ``` 
 
-#### ON DATABASE
+ ON DATABASE
 ``` sql
 CREATE TRIGGER TrackTableChanges
 ON DATABASE
@@ -232,20 +232,20 @@ AS
     VALUES (EVENTDATA(), USER);
 ``` 
 
-#### ENABLE / DISABLE 
+ ENABLE / DISABLE 
 ``` sql
 DISABLE TRIGGER tr_myTrigger ON table_name
 ENABLE TRIGGER tr_myTrigger ON table_name
 DROP TRIGGER tr_myTrigger
 ``` 
 
-### IF EXISTS
+ IF EXISTS
 ``` sql
 IF EXISTS (SELECT * FROM inserted) SET @Insert = 1;
 IF EXISTS (SELECT * FROM deleted) SET @Delete = 1;
 ``` 
 
-### IF ELSE
+ IF ELSE
 ``` sql
 IF EXISTS 
     (SELECT * 
@@ -260,7 +260,7 @@ ELSE
     END;
 ``` 
 
-### CASE
+ CASE
 ``` sql
 DECLARE @Insert BIT = 0;
 DECLARE @Delete BIT = 0;
@@ -273,7 +273,7 @@ DECLARE @Delete BIT = 0;
     END AS event
 ```   
 
-### WHILE LOOPS
+ WHILE LOOPS
 ``` sql
 DECLARE @i INT
 SET @i = 1
@@ -285,7 +285,7 @@ BEGIN
 END
 ``` 
 
-### CTE
+ CTE
 ``` sql
 WITH cte AS (
     SELECT num_ID
@@ -302,8 +302,8 @@ WHERE num = prev_num
 AND num = next_num
 ``` 
 
-### SYSTEM FUNCTIONS
-#### WINDOW FUNCTIONS
+ SYSTEM FUNCTIONS
+ WINDOW FUNCTIONS
 ``` sql
 ROW_NUMBER(),
 RANK(),
@@ -323,7 +323,7 @@ PRECEDING, -- includes a specified number of rows before the current row.
 FOLLOWING -- includes a specified number of rows after the current row.
 ``` 
 
-#### AGGREGATE
+ AGGREGATE
 ``` sql
 COUNT(Amount),
 SUM(Amount),
@@ -333,7 +333,7 @@ AVG(Amount),
 AVG(DISTINCT Amount)
 ``` 
 
-#### DATES 
+ DATES 
 ``` sql
 CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,CAST('420,69' AS DECIMAL(3,2)) AS string_to_decimal 
@@ -351,11 +351,11 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,DATEADD(DAY, 14, @Date)
 ,DATEDIFF(HOUR, @ins_date, GETDATE())
 
-,FORMAT(@Date, 'd', 'pl-PL'), FORMAT(@Date, 'dd-MM-YYYY'), FORMAT(123456, '###-###')
+,FORMAT(@Date, 'd', 'pl-PL'), FORMAT(@Date, 'dd-MM-YYYY'), FORMAT(123456, '-')
 ,FORMAT(CAST('2018-01-01 14:00' AS datetime2), N'HH:mm') -- 14:00
 ``` 
 
-#### STRINGS
+ STRINGS
 ``` sql
 ,LEN(@string)
 ,CHARINDEX('pizza', 'i LIKE pizza AND burgir', 5) -- third parameter IS optional, USE > 0 OR = 0 (IN WHERE)
@@ -374,7 +374,7 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,STRING_AGG(CONCAT(first_name, CHAR(13))) -- carriage RETURN
 ``` 
 
-#### MATH 
+ MATH 
 ``` sql
 ,ABS(@amount) -- non negative VALUE
 ,SIGN(@amount) -- RETURN -1,0,1 based IF negative
@@ -387,7 +387,7 @@ CAST(GETDATE() AS nvarchar(50)) AS string_date
 ,RAND() -- random FROM 0-1, can also be used IN ORDER BY to RETURN random ROWS
 ``` 
 
-### USER DEFINED FUNCTIONS
+ USER DEFINED FUNCTIONS
 ``` sql
 CREATE OR ALTER FUNCTION myFunction()
 RETURNS INT
@@ -412,7 +412,7 @@ RETURNS TABLE AS RETURN (
 )
 ``` 
 
-### VIEWS
+ VIEWS
 ``` sql
 CREATE VIEW high_scores AS
 SELECT * FROM REVIEWS
@@ -421,7 +421,7 @@ WHERE score > 9;
 DROP VIEW table_v_main
 ``` 
 
-#### VIEW VIEWS
+ VIEW VIEWS
 ``` sql
 SELECT * 
 FROM information_schema.views
@@ -432,7 +432,7 @@ INNER JOIN sys.sql_modules as m
 ON m.object_id = v.object_id
 ``` 
 
-### TRANSACTIONS
+ TRANSACTIONS
 ``` sql
 BEGIN TRANSACTION my_tran
     DELETE FROM [AdventureWorks2022].[Sales].[Customer]
@@ -442,7 +442,7 @@ ROLLBACK TRANSACTION my_tran
 COMMIT TRANSACTION my_tran
 ``` 
 
-### INDEXES
+ INDEXES
 ``` sql
 GO
 CREATE VIEW sales_by_region WITH SCHEMABINDING
@@ -456,7 +456,7 @@ CREATE UNIQUE CLUSTERED INDEX IX_sales_by_region
 ON sales_by_region (region)
 ``` 
 
-### PARTITIONING (postgre)
+ PARTITIONING (postgre)
 ``` sql
 CREATE TABLE table_name (
     table_ID INT PRIMARY KEY IDENTITY (1,1),
@@ -474,7 +474,7 @@ PARTITION OF table_name (
 CREATE INDEX ON table_name ('ins_date')
 ``` 
 
-### MERGE
+ MERGE
 ``` sql
 MERGE db_test.dbo.TableName AS TARGET
 USING db_test.dbo.TableName_tmp AS source
@@ -487,7 +487,7 @@ WHEN NOT MATCHED THEN
     VALUES (source.Code_ID, source.Description);
 ``` 
 
-### CHECK TABLE LOG
+ CHECK TABLE LOG
 ``` sql
 SELECT *
 FROM sys.tables AS tables
@@ -497,7 +497,7 @@ WHERE database_id = DB_ID()
 AND name LIKE 'myTable'
 ``` 
 
-#### APPLY
+ APPLY
 ``` sql
 -- apply the result of the subquery (in this case, a single-row result) to each row from table_name. 
 FROM table_name
@@ -506,7 +506,7 @@ CROSS APPLY (
 ) AS my_date_applied
 ``` 
 
-### open JSON file in SQL view
+ open JSON file in SQL view
 ``` sql
 Select JSON_line
 FROM my_view as view_data
@@ -521,7 +521,7 @@ CROSS APPLY OPENJSON(JSON_level1.Process) WITH (
 ) as JSON_level2
 ``` 
 
-### values as a CSV string in one row
+ values as a CSV string in one row
 ``` sql
 SELECT sell_date
 ,COUNT(product)
@@ -531,8 +531,8 @@ GROUP BY sell_date
 -- works like aggregate function, cannot be used in window functions
 ``` 
 
-### ADMINISTRATION
-#### LOGIN / USER
+ ADMINISTRATION
+ LOGIN / USER
 ``` sql
 CREATE LOGIN reporting_user WITH PASSWORD = 'myPswrd'
 CREATE USER reporting_user FOR LOGIN reporting_user
@@ -540,7 +540,7 @@ DROP LOGIN login_name;
 DROP USER user_name;
 ``` 
 
-#### ROLES
+ROLES
 ``` sql
 CREATE ROLE data_analyst
 GRANT UPDATE ON sales TO data_analyst
@@ -551,26 +551,44 @@ REVOKE INSERT ON table_v_main FROM reporting_user;
 DROP ROLE data_analyst
 ```
 
-#### CURSOR
-FIRST is used to fetch only the first row from the cursor table. 
-LAST is used to fetch only the last row from the cursor table. 
-NEXT is used to fetch data in a forward direction from the cursor table. 
-PRIOR is used to fetch data in a backward direction from the cursor table. 
-ABSOLUTE n is used to fetch the exact nth row from the cursor table. 
-RELATIVE n is used to fetch the data in an incremental way as well as a decremental way. 
+CURSORS <br>
+FIRST is used to fetch only the first row from the cursor table. <br>
+LAST is used to fetch only the last row from the cursor table. <br>
+NEXT is used to fetch data in a forward direction from the cursor table. <br> 
+PRIOR is used to fetch data in a backward direction from the cursor table. <br>
+ABSOLUTE n is used to fetch the exact nth row from the cursor table. <br>
+RELATIVE n is used to fetch the data in an incremental way as well as a decremental way. <br> 
 ``` sql
 DECLARE s1 CURSOR FOR SELECT * FROM studDetails
 OPEN s1
-FETCH FIRST FROM s1
-FETCH LAST FROM s1
-FETCH NEXT FROM s1
-FETCH PRIOR FROM s1
-FETCH ABSOLUTE 7 FROM s1
-FETCH RELATIVE -2 FROM s1
+    FETCH FIRST FROM s1
+    FETCH LAST FROM s1
+    FETCH NEXT FROM s1
+    FETCH PRIOR FROM s1
+    FETCH ABSOLUTE 7 FROM s1
+    FETCH RELATIVE -2 FROM s1
 CLOSE s1
 ```
+``` sql
+DECLARE @Employee_ID INT
+DECLARE @FirstName NVARCHAR(50)
 
-#### SYSTEM OBJECTS QUERY (views)
+DECLARE employee_cursor CURSOR FOR
+SELECT Employee_ID ,FirstName
+FROM Employees
+
+OPEN employee_cursor
+    FETCH NEXT FROM employee_cursor INTO @Employee_ID, @FirstName -- initial fetch operation, positions cursor on the first row
+    WHILE @@FETCH_STATUS = 0 -- if no more rows, fetch_status = -1 (checks if there are more rows to fetch)
+    BEGIN
+        PRINT('Employee_ID: ' + @Employee_ID)
+        FETCH NEXT FROM employee_curstor INTO @Employee_ID, @FirstName
+    END
+CLOSE emploee_cursor
+DEALLOCATE emploee_cursor
+```
+
+ SYSTEM OBJECTS QUERY (views)
 ``` sql
 SELECT *
 FROM sys.objects AS obj
@@ -580,7 +598,7 @@ WHERE obj.type = 'V'
 AND mod.definition like '%MDMR%'
 ```
 
-#### SYSTEM OBJECTS QUERY (tables)
+ SYSTEM OBJECTS QUERY (tables)
 ``` sql
 SELECT 
 tab.name AS table_name,
